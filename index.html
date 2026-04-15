@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تقرير المرور على محطات مياه الشرب والصرف الصحي</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1a73e8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<div id="mainScreen" class="screen active">
+    <div class="main-header">
+        <div class="main-header-top">
+            <div class="header-logo-box">
+                <img src="logo-holding.png" alt="شعار الشركة القابضة" class="header-logo">
+            </div>
+            <div class="header-titles">
+                <h1 class="header-title-main">الشركة القابضة لمياه الشرب والصرف الصحي</h1>
+                <h2 class="header-title-sub">الإدارة العامة للسلامة والصحة المهنية والطوارئ والأزمات</h2>
+                <div class="header-divider"></div>
+                <h3 class="header-title-report">
+                    <i class="fas fa-water"></i>
+                    تقرير المرور على محطات مياه الشرب والصرف الصحي
+                </h3>
+            </div>
+            <div class="header-logo-box">
+                <img src="logo-safety.png" alt="شعار الإدارة العامة للسلامة" class="header-logo">
+            </div>
+        </div>
+        <div class="header-date-bar">
+            <div class="header-info-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span id="currentDate"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="stats-container">
+        <div class="stat-card total">
+            <i class="fas fa-clipboard-list"></i>
+            <div class="stat-info">
+                <span class="stat-number" id="totalReports">0</span>
+                <span class="stat-label">إجمالي التقارير</span>
+            </div>
+        </div>
+        <div class="stat-card compliant">
+            <i class="fas fa-check-circle"></i>
+            <div class="stat-info">
+                <span class="stat-number" id="compliantCount">0</span>
+                <span class="stat-label">مطابق</span>
+            </div>
+        </div>
+        <div class="stat-card non-compliant">
+            <i class="fas fa-times-circle"></i>
+            <div class="stat-info">
+                <span class="stat-number" id="nonCompliantCount">0</span>
+                <span class="stat-label">غير مطابق</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="action-buttons">
+        <button class="btn btn-primary btn-large" onclick="showScreen('newReport')">
+            <i class="fas fa-plus-circle"></i> تقرير جديد
+        </button>
+        <button class="btn btn-secondary btn-large" onclick="showScreen('reportsList')">
+            <i class="fas fa-folder-open"></i> التقارير السابقة
+        </button>
+    </div>
+</div>
+
+<div id="newReport" class="screen">
+    <div class="screen-header">
+        <button class="btn-back" onclick="showScreen('mainScreen')">
+            <i class="fas fa-arrow-right"></i>
+        </button>
+        <h2><i class="fas fa-file-medical"></i> تقرير مرور جديد</h2>
+    </div>
+
+    <div class="report-title-card">
+        <div class="report-title-logos">
+            <img src="logo-holding.png" alt="شعار الشركة القابضة" class="report-title-logo">
+            <div class="report-title-text">
+                <h2>الشركة القابضة لمياه الشرب والصرف الصحي</h2>
+                <p>الإدارة العامة للسلامة والصحة المهنية والطوارئ والأزمات</p>
+                <div class="report-title-sub-text">
+                    <i class="fas fa-water"></i>
+                    تقرير المرور على محطات مياه الشرب والصرف الصحي
+                </div>
+            </div>
+            <img src="logo-safety.png" alt="شعار الإدارة العامة" class="report-title-logo">
+        </div>
+        <div class="report-title-details">
+            <div class="title-detail-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span id="reportDateDisplay">--</span>
+            </div>
+            <div class="title-detail-item">
+                <i class="fas fa-industry"></i>
+                <span id="reportStationDisplay">لم يتم اختيار المحطة بعد</span>
+            </div>
+        </div>
+    </div>
+
+    <form id="inspectionForm" class="form-container">
+
+        <div class="form-section">
+            <h3><i class="fas fa-info-circle"></i> المعلومات الأساسية</h3>
+
+            <!-- السطر 1: اسم المفتش + تاريخ المرور -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="inspectorName">
+                        <i class="fas fa-user-tie"></i> اسم المفتش
+                    </label>
+                    <input type="text" id="inspectorName" placeholder="أدخل اسم المفتش" required>
+                </div>
+                <div class="form-group">
+                    <label for="inspectionDate">
+                        <i class="fas fa-calendar"></i> تاريخ المرور
+                    </label>
+                    <input type="date" id="inspectionDate" required onchange="updateTitleDate()">
+                </div>
+            </div>
+
+            <!-- السطر 2: وقت المرور + نوع المحطة -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="inspectionTime">
+                        <i class="fas fa-clock"></i> وقت المرور
+                    </label>
+                    <input type="time" id="inspectionTime" required>
+                </div>
+                <div class="form-group">
+                    <label for="stationType">
+                        <i class="fas fa-industry"></i> نوع المحطة
+                    </label>
+                    <select id="stationType" required onchange="updateTitleStation()">
+                        <option value="">اختر نوع المحطة</option>
+                        <option value="محطة تنقية مياه">محطة تنقية مياه</option>
+                        <option value="محطة معالجة صرف صحي">محطة معالجة صرف صحي</option>
+                        <option value="محطة تحلية مياه البحر">محطة تحلية مياه البحر</option>
+                        <option value="رافع صرف صحي">رافع صرف صحي</option>
+                        <option value="رافع مياه شرب">رافع مياه شرب</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- السطر 3: اسم المحطة + الفرع -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="stationName">
+                        <i class="fas fa-map-pin"></i> اسم المحطة
+                    </label>
+                    <input type="text" id="stationName" placeholder="أدخل اسم المحطة"
+                           required oninput="updateTitleStation()">
+                </div>
+                <div class="form-group">
+                    <label for="branch">
+                        <i class="fas fa-code-branch"></i> الفرع
+                    </label>
+                    <input type="text" id="branch" placeholder="أدخل اسم الفرع" required>
+                </div>
+            </div>
+
+            <!-- السطر 4: الموقع كامل السطر -->
+            <div class="form-group form-group-full">
+                <label for="stationLocation">
+                    <i class="fas fa-map-marker-alt"></i> الموقع
+                </label>
+                <div class="input-with-btn">
+                    <input type="text" id="stationLocation"
+                           placeholder="اكتب تفاصيل الموقع كاملة أو استخدم GPS" required>
+                    <button type="button" class="input-btn" onclick="getGPSLocation()">
+                        <i class="fas fa-crosshairs"></i> GPS
+                    </button>
+                </div>
+            </div>
+            <div id="gpsCoords" class="gps-display"></div>
+
+            <!-- السطر 5: الطاقة التصميمية + الفعلية مع سهم الوحدة -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="designCapacity">
+                        <i class="fas fa-drafting-compass"></i> الطاقة التصميمية
+                    </label>
+                    <div class="input-with-unit">
+                        <input type="number" id="designCapacity"
+                               placeholder="مثال: 50000" step="any" min="0">
+                        <select class="input-unit-select" id="capacityUnit" onchange="changeCapacityUnit()">
+                            <option value="م³/يوم">م³/يوم</option>
+                            <option value="لتر/ثانية">لتر/ث</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="actualCapacity">
+                        <i class="fas fa-tachometer-alt"></i> الطاقة الفعلية
+                    </label>
+                    <div class="input-with-unit">
+                        <input type="number" id="actualCapacity"
+                               placeholder="مثال: 35000" step="any" min="0">
+                        <span class="input-unit" id="actualUnit">م³/يوم</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="capacity-bar-container" id="capacityBarContainer" style="display:none;">
+                <label><i class="fas fa-chart-bar"></i> نسبة التشغيل</label>
+                <div class="capacity-bar">
+                    <div class="capacity-fill" id="capacityFill">0%</div>
+                </div>
+                <span class="capacity-text" id="capacityText"></span>
+            </div>
+
+            <!-- السطر 6: مسؤول السلامة + مدير المحطة -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="safetyOfficer">
+                        <i class="fas fa-hard-hat"></i> مسؤول السلامة والصحة المهنية
+                    </label>
+                    <input type="text" id="safetyOfficer"
+                           placeholder="أدخل اسم مسؤول السلامة" required>
+                </div>
+                <div class="form-group">
+                    <label for="stationManager">
+                        <i class="fas fa-user-shield"></i> مدير المحطة
+                    </label>
+                    <input type="text" id="stationManager"
+                           placeholder="أدخل اسم مدير المحطة" required>
+                </div>
+            </div>
+
+            <!-- السطر 7: شهادة ISO - 3 بنود -->
+            <div class="form-row-three">
+                <div class="form-group">
+                    <label for="isoStatus">
+                        <i class="fas fa-certificate"></i> شهادة الايزو (ISO)
+                    </label>
+                    <select id="isoStatus"
+                            onchange="toggleYearField('isoStatus','isoYear','isoYearMsg');toggleIsoType()">
+                        <option value="غير حاصلة">غير حاصلة</option>
+                        <option value="حاصلة">حاصلة</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="isoType">
+                        <i class="fas fa-tag"></i> نوع شهادة الايزو
+                    </label>
+                    <input type="text" id="isoType"
+                           placeholder="مثال: ISO 9001"
+                           style="display:none;">
+                    <div class="no-cert-msg" id="isoTypeMsg">
+                        <i class="fas fa-info-circle"></i> غير حاصلة
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="isoYear">
+                        <i class="fas fa-calendar-check"></i> سنة الحصول
+                    </label>
+                    <input type="number" id="isoYear"
+                           placeholder="مثال: 2022"
+                           min="2000" max="2100" style="display:none;">
+                    <div class="no-cert-msg" id="isoYearMsg">
+                        <i class="fas fa-info-circle"></i> غير حاصلة
+                    </div>
+                </div>
+            </div>
+
+            <!-- السطر 8: شهادة TSM -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="tsmStatus">
+                        <i class="fas fa-award"></i> شهادة (TSM)
+                    </label>
+                    <select id="tsmStatus"
+                            onchange="toggleYearField('tsmStatus','tsmYear','tsmYearMsg')">
+                        <option value="غير حاصلة">غير حاصلة</option>
+                        <option value="حاصلة">حاصلة</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="tsmYear">
+                        <i class="fas fa-calendar-check"></i> سنة الحصول على TSM
+                    </label>
+                    <input type="number" id="tsmYear"
+                           placeholder="مثال: 2023"
+                           min="2000" max="2100" style="display:none;">
+                    <div class="no-cert-msg" id="tsmYearMsg">
+                        <i class="fas fa-info-circle"></i> غير حاصلة على الشهادة
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- بنود الفحص -->
+        <div class="form-section">
+            <h3><i class="fas fa-clipboard-check"></i> بنود الفحص</h3>
+
+            <div class="inspection-item-full">
+                <div class="item-header">
+                    <span class="item-number">1</span>
+                    <span class="item-title">المسطحات المائية</span>
+                </div>
+                <div class="item-body">
+                    <div class="status-toggle">
+                        <button type="button" class="toggle-btn compliant active"
+                                onclick="toggleStatus(this,'waterSurfaces')">
+                            <i class="fas fa-check"></i> مطابق
+                        </button>
+                        <button type="button" class="toggle-btn non-compliant"
+                                onclick="toggleStatus(this,'waterSurfaces')">
+                            <i class="fas fa-times"></i> غير مطابق
+                        </button>
+                    </div>
+                    <input type="hidden" id="waterSurfaces" value="مطابق">
+                    <textarea class="item-notes" id="waterSurfaces_notes"
+                              placeholder="التفاصيل..."></textarea>
+                </div>
+            </div>
+
+            <div class="inspection-item-full">
+                <div class="item-header">
+                    <span class="item-number">2</span>
+                    <span class="item-title">عنابر الطلمبات</span>
+                </div>
+                <div class="item-body">
+                    <div class="status-toggle">
+                        <button type="button" class="toggle-btn compliant active"
+                                onclick="toggleStatus(this,'pumpHouses')">
+                            <i class="fas fa-check"></i> مطابق
+                        </button>
+                        <button type="button" class="toggle-btn non-compliant"
+                                onclick="toggleStatus(this,'pumpHouses')">
+                            <i class="fas fa-times"></i> غير مطابق
+                        </button>
+                    </div>
+                    <input type="hidden" id="pumpHouses" value="مطابق">
+                    <textarea class="item-notes" id="pumpHouses_notes"
+                              placeholder="التفاصيل..."></textarea>
+                </div>
+            </div>
+
+            <div class="inspection-item-full">
+                <div class="item-header">
+                    <span class="item-number">3</span>
+                    <span class="item-title">عنبر الكلور</span>
+                </div>
+                <div class="item-body">
+                    <div class="status-toggle">
+                        <button type="button" class="toggle-btn compliant active"
+                                onclick="toggleStatus(this,'chlorineRoom')">
+                            <i class="fas fa-check"></i> مطابق
+                        </button>
+                        <button type="button" class="toggle-btn non-compliant"
+                                onclick="toggleStatus(this,'chlorineRoom')">
+                            <i class="fas fa-times"></i> غير مطابق
+                        </button>
+                    </div>
+                    <input type="hidden" id="chlorineRoom" value="مطابق">
+                    <textarea class="item-notes" id="chlorineRoom_notes"
+                              placeholder="التفاصيل..."></textarea>
+                </div>
+            </div>
+
+            <div class="inspection-item-full">
+                <div class="item-header">
+                    <span class="item-number">4</span>
+                    <span class="item-title">عنبر المولد وخزان الديزل</span>
+                </div>
+                <div class="item-body">
+                    <div class="status-toggle">
+                        <button type="button" class="toggle-btn compliant active"
+                                onclick="toggleStatus(this,'generatorRoom')">
+                            <i class="fas fa-check"></i> مطابق
+                        </button>
+                        <button type="button" class="toggle-btn non-compliant"
+                                onclick="toggleStatus(this,'generatorRoom')">
+                            <i class="fas fa-times"></i> غير مطابق
+                        </button>
+                    </div>
+                    <input type="hidden" id="generatorRoom" value="مطابق">
+                    <textarea class="item-notes" id="generatorRoom_notes"
+                              placeholder="التفاصيل..."></textarea>
+                </div>
+            </div>
+
+            <div class="inspection-item-full">
+                <div class="item-header">
+                    <span class="item-number">5</span>
+                    <span class="item-title">المحولات</span>
+                </div>
+                <div class="item-body">
+                    <div class="status-toggle">
+                        <button type="button" class="toggle-btn compliant active"
+                                onclick="toggleStatus(this,'transformers')">
+                            <i class="fas fa-check"></i> مطابق
+                        </button>
+                        <button type="button" class="toggle-btn non-compliant"
+                                onclick="toggleStatus(this,'transformers')">
+                            <i class="fas fa-times"></i> غير مطابق
+                        </button>
+                    </div>
+                    <input type="hidden" id="transformers" value="مطابق">
+                    <textarea class="item-notes" id="transformers_notes"
+                              placeholder="التفاصيل..."></textarea>
+                </div>
+            </div>
+
+            <div class="inspection-item-full">
+                <div class="item-header">
+                    <span class="item-number">6</span>
+                    <span class="item-title">المعمل</span>
+                </div>
+                <div class="item-body">
+                    <div class="status-toggle">
+                        <button type="button" class="toggle-btn compliant active"
+                                onclick="toggleStatus(this,'laboratory')">
+                            <i class="fas fa-check"></i> مطابق
+                        </button>
+                        <button type="button" class="toggle-btn non-compliant"
+                                onclick="toggleStatus(this,'laboratory')">
+                            <i class="fas fa-times"></i> غير مطابق
+                        </button>
+                    </div>
+                    <input type="hidden" id="laboratory" value="مطابق">
+                    <textarea class="item-notes" id="laboratory_notes"
+                              placeholder="التفاصيل..."></textarea>
+                </div>
+            </div>
+
+            <div class="inspection-item-full">
+                <div class="item-header">
+                    <span class="item-number">7</span>
+                    <span class="item-title">المخازن</span>
+                </div>
+                <div class="item-body">
+                    <div class="status-toggle">
+                        <button type="button" class="toggle-btn compliant active"
+                                onclick="toggleStatus(this,'warehouses')">
+                            <i class="fas fa-check"></i> مطابق
+                        </button>
+                        <button type="button" class="toggle-btn non-compliant"
+                                onclick="toggleStatus(this,'warehouses')">
+                            <i class="fas fa-times"></i> غير مطابق
+                        </button>
+                    </div>
+                    <input type="hidden" id="warehouses" value="مطابق">
+                    <textarea class="item-notes" id="warehouses_notes"
+                              placeholder="التفاصيل..."></textarea>
+                </div>
+            </div>
+
+            <div class="inspection-item-full">
+                <div class="item-header">
+                    <span class="item-number">8</span>
+                    <span class="item-title">عنبر الكيماويات</span>
+                </div>
+                <div class="item-body">
+                    <div class="status-toggle">
+                        <button type="button" class="toggle-btn compliant active"
+                                onclick="toggleStatus(this,'chemicalRoom')">
+                            <i class="fas fa-check"></i> مطابق
+                        </button>
+                        <button type="button" class="toggle-btn non-compliant"
+                                onclick="toggleStatus(this,'chemicalRoom')">
+                            <i class="fas fa-times"></i> غير مطابق
+                        </button>
+                    </div>
+                    <input type="hidden" id="chemicalRoom" value="مطابق">
+                    <textarea class="item-notes" id="chemicalRoom_notes"
+                              placeholder="التفاصيل..."></textarea>
+                </div>
+            </div>
+
+            <div class="inspection-item-full">
+                <div class="item-header">
+                    <span class="item-number">9</span>
+                    <span class="item-title">إجراءات العمل الآمنة واللوحات الإرشادية</span>
+                </div>
+                <div class="item-body">
+                    <div class="status-toggle">
+                        <button type="button" class="toggle-btn compliant active"
+                                onclick="toggleStatus(this,'safeProcedures')">
+                            <i class="fas fa-check"></i> مطابق
+                        </button>
+                        <button type="button" class="toggle-btn non-compliant"
+                                onclick="toggleStatus(this,'safeProcedures')">
+                            <i class="fas fa-times"></i> غير مطابق
+                        </button>
+                    </div>
+                    <input type="hidden" id="safeProcedures" value="مطابق">
+                    <textarea class="item-notes" id="safeProcedures_notes"
+                              placeholder="التفاصيل..."></textarea>
+                </div>
+            </div>
+
+            <div class="inspection-item-full">
+                <div class="item-header">
+                    <span class="item-number">10</span>
+                    <span class="item-title">معدات مكافحة الحريق وصناديق الإسعافات الأولية</span>
+                </div>
+                <div class="item-body">
+                    <div class="status-toggle">
+                        <button type="button" class="toggle-btn compliant active"
+                                onclick="toggleStatus(this,'fireEquipment')">
+                            <i class="fas fa-check"></i> مطابق
+                        </button>
+                        <button type="button" class="toggle-btn non-compliant"
+                                onclick="toggleStatus(this,'fireEquipment')">
+                            <i class="fas fa-times"></i> غير مطابق
+                        </button>
+                    </div>
+                    <input type="hidden" id="fireEquipment" value="مطابق">
+                    <textarea class="item-notes" id="fireEquipment_notes"
+                              placeholder="التفاصيل..."></textarea>
+                </div>
+            </div>
+
+            <div class="inspection-item-full">
+                <div class="item-header">
+                    <span class="item-number">11</span>
+                    <span class="item-title">السجلات</span>
+                </div>
+                <div class="item-body">
+                    <div class="status-toggle">
+                        <button type="button" class="toggle-btn compliant active"
+                                onclick="toggleStatus(this,'records')">
+                            <i class="fas fa-check"></i> مطابق
+                        </button>
+                        <button type="button" class="toggle-btn non-compliant"
+                                onclick="toggleStatus(this,'records')">
+                            <i class="fas fa-times"></i> غير مطابق
+                        </button>
+                    </div>
+                    <input type="hidden" id="records" value="مطابق">
+                    <textarea class="item-notes" id="records_notes"
+                              placeholder="التفاصيل..."></textarea>
+                </div>
+            </div>
+
+            <div class="inspection-item-full">
+                <div class="item-header">
+                    <span class="item-number">12</span>
+                    <span class="item-title">خطط الطوارئ</span>
+                </div>
+                <div class="item-body">
+                    <div class="status-toggle">
+                        <button type="button" class="toggle-btn compliant active"
+                                onclick="toggleStatus(this,'emergencyPlans')">
+                            <i class="fas fa-check"></i> مطابق
+                        </button>
+                        <button type="button" class="toggle-btn non-compliant"
+                                onclick="toggleStatus(this,'emergencyPlans')">
+                            <i class="fas fa-times"></i> غير مطابق
+                        </button>
+                    </div>
+                    <input type="hidden" id="emergencyPlans" value="مطابق">
+                    <textarea class="item-notes" id="emergencyPlans_notes"
+                              placeholder="التفاصيل..."></textarea>
+                </div>
+            </div>
+
+            <div class="inspection-item-full">
+                <div class="item-header">
+                    <span class="item-number">13</span>
+                    <span class="item-title">تدريب العاملين</span>
+                </div>
+                <div class="item-body">
+                    <div class="status-toggle">
+                        <button type="button" class="toggle-btn compliant active"
+                                onclick="toggleStatus(this,'staffTraining')">
+                            <i class="fas fa-check"></i> مطابق
+                        </button>
+                        <button type="button" class="toggle-btn non-compliant"
+                                onclick="toggleStatus(this,'staffTraining')">
+                            <i class="fas fa-times"></i> غير مطابق
+                        </button>
+                    </div>
+                    <input type="hidden" id="staffTraining" value="مطابق">
+                    <textarea class="item-notes" id="staffTraining_notes"
+                              placeholder="التفاصيل..."></textarea>
+                </div>
+            </div>
+
+            <div class="inspection-item-full">
+                <div class="item-header">
+                    <span class="item-number">14</span>
+                    <span class="item-title">مهمات الوقاية الشخصية</span>
+                </div>
+                <div class="item-body">
+                    <div class="status-toggle">
+                        <button type="button" class="toggle-btn compliant active"
+                                onclick="toggleStatus(this,'ppe')">
+                            <i class="fas fa-check"></i> مطابق
+                        </button>
+                        <button type="button" class="toggle-btn non-compliant"
+                                onclick="toggleStatus(this,'ppe')">
+                            <i class="fas fa-times"></i> غير مطابق
+                        </button>
+                    </div>
+                    <input type="hidden" id="ppe" value="مطابق">
+                    <textarea class="item-notes" id="ppe_notes"
+                              placeholder="التفاصيل..."></textarea>
+                </div>
+            </div>
+
+            <div class="inspection-item-full">
+                <div class="item-header">
+                    <span class="item-number">15</span>
+                    <span class="item-title">معدات السلامة والصحة المهنية</span>
+                </div>
+                <div class="item-body">
+                    <div class="status-toggle">
+                        <button type="button" class="toggle-btn compliant active"
+                                onclick="toggleStatus(this,'safetyEquipment')">
+                            <i class="fas fa-check"></i> مطابق
+                        </button>
+                        <button type="button" class="toggle-btn non-compliant"
+                                onclick="toggleStatus(this,'safetyEquipment')">
+                            <i class="fas fa-times"></i> غير مطابق
+                        </button>
+                    </div>
+                    <input type="hidden" id="safetyEquipment" value="مطابق">
+                    <textarea class="item-notes" id="safetyEquipment_notes"
+                              placeholder="التفاصيل..."></textarea>
+                </div>
+            </div>
+
+            <div class="inspection-item-full item-crane">
+                <div class="item-header">
+                    <span class="item-number">16</span>
+                    <span class="item-title">شهادات معايرة الأوناش</span>
+                    <span class="item-badge-special">يوجد / لا يوجد</span>
+                </div>
+                <div class="item-body">
+                    <div class="status-toggle">
+                        <button type="button" class="toggle-btn exist active"
+                                onclick="toggleStatusCrane(this,'craneCerts')">
+                            <i class="fas fa-check-double"></i> يوجد
+                        </button>
+                        <button type="button" class="toggle-btn not-exist"
+                                onclick="toggleStatusCrane(this,'craneCerts')">
+                            <i class="fas fa-ban"></i> لا يوجد
+                        </button>
+                    </div>
+                    <input type="hidden" id="craneCerts" value="يوجد">
+                    <textarea class="item-notes" id="craneCerts_notes"
+                              placeholder="التفاصيل..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3><i class="fas fa-flag"></i> التقييم العام</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="overallStatus">
+                        <i class="fas fa-flag"></i> الحالة العامة للمحطة
+                    </label>
+                    <select id="overallStatus" required onchange="updateOverallColor(this)">
+                        <option value="">اختر الحالة</option>
+                        <option value="مطابق">✅ مطابق</option>
+                        <option value="غير مطابق">❌ غير مطابق</option>
+                        <option value="يحتاج متابعة">⚠️ يحتاج متابعة</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-exclamation-triangle"></i> درجة الخطورة</label>
+                    <div class="severity-buttons">
+                        <button type="button" class="severity-btn low active"
+                                onclick="setSeverity('منخفضة',this)">منخفضة</button>
+                        <button type="button" class="severity-btn medium"
+                                onclick="setSeverity('متوسطة',this)">متوسطة</button>
+                        <button type="button" class="severity-btn high"
+                                onclick="setSeverity('عالية',this)">عالية</button>
+                        <button type="button" class="severity-btn critical"
+                                onclick="setSeverity('حرجة',this)">حرجة</button>
+                    </div>
+                    <input type="hidden" id="severity" value="منخفضة">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3><i class="fas fa-edit"></i> الملاحظات والتوصيات العامة</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="notes"><i class="fas fa-sticky-note"></i> الملاحظات</label>
+                    <textarea id="notes" rows="4" placeholder="اكتب ملاحظاتك العامة هنا..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="recommendations"><i class="fas fa-lightbulb"></i> التوصيات</label>
+                    <textarea id="recommendations" rows="4" placeholder="اكتب التوصيات هنا..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3><i class="fas fa-camera"></i> صور الملاحظات</h3>
+            <div class="upload-box" onclick="document.getElementById('photoInput').click()">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>اضغط لرفع صورة أو التقط صورة</p>
+                <span>JPG, PNG - حد أقصى 12 صورة</span>
+            </div>
+            <input type="file" id="photoInput" accept="image/*" capture="environment"
+                   multiple style="display:none" onchange="handlePhotos(this)">
+            <div id="photoPreview" class="photo-preview-grid"></div>
+        </div>
+
+        <div class="form-actions">
+            <button type="button" class="btn btn-success btn-large" onclick="saveReport()">
+                <i class="fas fa-save"></i> حفظ التقرير
+            </button>
+            <button type="button" class="btn btn-primary btn-large" onclick="saveAndExportPDF()">
+                <i class="fas fa-file-pdf"></i> حفظ وتصدير PDF
+            </button>
+        </div>
+    </form>
+</div>
+
+<div id="reportsList" class="screen">
+    <div class="screen-header">
+        <button class="btn-back" onclick="showScreen('mainScreen')">
+            <i class="fas fa-arrow-right"></i>
+        </button>
+        <h2><i class="fas fa-folder-open"></i> التقارير السابقة</h2>
+    </div>
+    <div class="filter-bar">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="بحث..." oninput="filterReports()">
+        </div>
+        <select id="filterStatus" onchange="filterReports()">
+            <option value="all">الكل</option>
+            <option value="مطابق">مطابق</option>
+            <option value="غير مطابق">غير مطابق</option>
+            <option value="يحتاج متابعة">يحتاج متابعة</option>
+        </select>
+    </div>
+    <div id="reportsContainer" class="reports-list"></div>
+</div>
+
+<div id="viewReport" class="screen">
+    <div class="screen-header">
+        <button class="btn-back" onclick="showScreen('reportsList')">
+            <i class="fas fa-arrow-right"></i>
+        </button>
+        <h2><i class="fas fa-file-alt"></i> تفاصيل التقرير</h2>
+        <button class="btn btn-primary btn-small" onclick="exportCurrentPDF()">
+            <i class="fas fa-file-pdf"></i> PDF
+        </button>
+    </div>
+    <div id="reportDetail" class="report-detail"></div>
+</div>
+
+<div id="pdfTemplate" style="display:none;"></div>
+<div id="successToast" class="toast">
+    <i class="fas fa-check-circle"></i>
+    <span id="toastMessage">تم الحفظ بنجاح</span>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

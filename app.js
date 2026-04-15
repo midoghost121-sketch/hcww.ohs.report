@@ -5,6 +5,9 @@ var currentReportId = null;
 var LOGO_HOLDING = "logo-holding.png";
 var LOGO_SAFETY = "logo-safety.png";
 
+// رابط Google Sheets
+var API_URL = 'https://script.google.com/macros/s/AKfycbytn_qHb1Gg6AdipV5r7C6pREyMOC3b2g9EXDsXsgSam-keJuUM3VlPfRhvKB9y373Z/exec';
+
 var inspectionItems = [
     { id: 'waterSurfaces', label: 'المسطحات المائية', type: 'normal' },
     { id: 'pumpHouses', label: 'عنابر الطلمبات', type: 'normal' },
@@ -56,7 +59,8 @@ function updateTitleDate() {
     var date = document.getElementById('inspectionDate').value;
     if (date) {
         var options = { year: 'numeric', month: 'long', day: 'numeric' };
-        document.getElementById('reportDateDisplay').textContent = new Date(date + 'T00:00:00').toLocaleDateString('ar-EG', options);
+        document.getElementById('reportDateDisplay').textContent =
+            new Date(date + 'T00:00:00').toLocaleDateString('ar-EG', options);
     }
 }
 
@@ -292,6 +296,36 @@ function collectInspectionData() {
     return data;
 }
 
+// ===========================
+// إرسال التقرير لـ Google Sheets
+// ===========================
+function sendToGoogleSheets(report) {
+    try {
+        fetch(API_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                date: report.date,
+                time: report.time,
+                inspectorName: report.inspectorName,
+                stationType: report.stationType,
+                stationName: report.stationName,
+                branch: report.branch,
+                stationLocation: report.stationLocation,
+                overallStatus: report.overallStatus,
+                notes: report.notes
+            })
+        }).then(function() {
+            console.log('تم الإرسال لـ Google Sheets');
+        }).catch(function() {
+            console.log('فشل الإرسال - محفوظ محلياً');
+        });
+    } catch(err) {
+        console.log('خطأ في الإرسال');
+    }
+}
+
 function saveReport() {
     var required = [
         'inspectorName', 'inspectionDate', 'inspectionTime',
@@ -345,9 +379,14 @@ function saveReport() {
         createdAt: new Date().toISOString()
     };
 
+    // حفظ محلي
     reports.unshift(report);
     localStorage.setItem('waterReports', JSON.stringify(reports));
     updateStats();
+
+    // إرسال لـ Google Sheets
+    sendToGoogleSheets(report);
+
     showToast('تم حفظ التقرير بنجاح ✅');
     return report;
 }
@@ -497,7 +536,9 @@ function renderReportsList() {
             report.overallStatus === 'غير مطابق' ? 'status-non-compliant' : 'status-follow-up';
         var badgeClass = report.overallStatus === 'مطابق' ? 'badge-compliant' :
             report.overallStatus === 'غير مطابق' ? 'badge-non-compliant' : 'badge-follow-up';
-        var icon = (report.stationType.includes('مياه') || report.stationType.includes('تنقية') || report.stationType.includes('تحلية')) ? 'fa-tint' : 'fa-toilet';
+        var icon = (report.stationType.includes('مياه') ||
+            report.stationType.includes('تنقية') ||
+            report.stationType.includes('تحلية')) ? 'fa-tint' : 'fa-toilet';
 
         return '<div class="report-card ' + statusClass + '" onclick="viewReport(' + report.id + ')">' +
             '<div class="report-card-icon"><i class="fas ' + icon + '"></i></div>' +
@@ -509,8 +550,9 @@ function renderReportsList() {
             '<p><i class="fas fa-user-tie"></i> ' + report.inspectorName + '</p></div>' +
             '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;">' +
             '<span class="report-card-badge ' + badgeClass + '">' + report.overallStatus + '</span>' +
-            '<button class="btn btn-small btn-danger" style="padding:5px 10px;font-size:11px;" onclick="event.stopPropagation();deleteReport(' + report.id + ')"><i class="fas fa-trash"></i></button>' +
-            '</div></div>';
+            '<button class="btn btn-small btn-danger" style="padding:5px 10px;font-size:11px;" ' +
+            'onclick="event.stopPropagation();deleteReport(' + report.id + ')">' +
+            '<i class="fas fa-trash"></i></button></div></div>';
     }).join('');
 }
 
@@ -604,7 +646,9 @@ function viewReport(id) {
         '<div class="detail-row"><span class="detail-label">اسم المحطة</span><span class="detail-value">' + report.stationName + '</span></div>' +
         '<div class="detail-row"><span class="detail-label">الفرع</span><span class="detail-value">' + (report.branch || '-') + '</span></div>' +
         '<div class="detail-row"><span class="detail-label">الموقع</span><span class="detail-value">' + report.stationLocation + '</span></div>' +
-        (report.gps.lat ? '<div class="detail-row"><span class="detail-label">GPS</span><span class="detail-value"><a href="https://maps.google.com/?q=' + report.gps.lat + ',' + report.gps.lng + '" target="_blank" style="color:var(--primary);">📍 ' + report.gps.lat + ', ' + report.gps.lng + '</a></span></div>' : '') +
+        (report.gps.lat ? '<div class="detail-row"><span class="detail-label">GPS</span><span class="detail-value">' +
+            '<a href="https://maps.google.com/?q=' + report.gps.lat + ',' + report.gps.lng + '" target="_blank" style="color:var(--primary);">📍 ' + report.gps.lat + ', ' + report.gps.lng + '</a>' +
+            '</span></div>' : '') +
         capacityHTML +
         '<div class="detail-row"><span class="detail-label">مسؤول السلامة</span><span class="detail-value">' + report.safetyOfficer + '</span></div>' +
         '<div class="detail-row"><span class="detail-label">مدير المحطة</span><span class="detail-value">' + report.stationManager + '</span></div>' +
@@ -644,8 +688,10 @@ function deleteReport(id) {
 
 function updateStats() {
     document.getElementById('totalReports').textContent = reports.length;
-    document.getElementById('compliantCount').textContent = reports.filter(function(r) { return r.overallStatus === 'مطابق'; }).length;
-    document.getElementById('nonCompliantCount').textContent = reports.filter(function(r) { return r.overallStatus === 'غير مطابق'; }).length;
+    document.getElementById('compliantCount').textContent =
+        reports.filter(function(r) { return r.overallStatus === 'مطابق'; }).length;
+    document.getElementById('nonCompliantCount').textContent =
+        reports.filter(function(r) { return r.overallStatus === 'غير مطابق'; }).length;
 }
 
 function resetForm() {

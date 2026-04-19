@@ -7,12 +7,6 @@ var LOGO_HOLDING = "logo-holding.png";
 var LOGO_SAFETY = "logo-safety.png";
 var API_URL = 'https://script.google.com/macros/s/AKfycbytn_qHb1Gg6AdipV5r7C6pREyMOC3b2g9EXDsXsgSam-keJuUM3VlPfRhvKB9y373Z/exec';
 
-var NC_URL = 'https://cloud.hcww.com.eg';
-var NC_USER = 'ahmed.eldesoky@hcww.com.eg';
-var NC_PASS = 'BEQ67-tzPRi-oiGrX-Spo7F-NENeA';
-var NC_REPORTS_FOLDER = '/السلامة والصحة المهنية/Reports';
-var NC_CSV_PATH = '/السلامة والصحة المهنية/data-123.csv';
-
 var inspectionItems = [
     { id: 'waterSurfaces', label: 'المسطحات المائية', type: 'normal' },
     { id: 'pumpHouses', label: 'عنابر الطلمبات', type: 'normal' },
@@ -58,16 +52,14 @@ function buildInspectionItems() {
 function pickItemPhoto(id, cam) {
     var inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'image/*';
     if (cam) inp.setAttribute('capture', 'environment');
-    inp.onchange = function(e) {
-        var f = e.target.files[0]; if (!f) return;
-        var r = new FileReader(); r.onload = function(ev) {
-            itemPhotos[id] = ev.target.result;
+    inp.onchange = function(e) { var f = e.target.files[0]; if (!f) return;
+        var r = new FileReader(); r.onload = function(ev) { itemPhotos[id] = ev.target.result;
             document.getElementById(id + '_photo_preview').innerHTML = '<div class="item-photo-preview"><img src="' + ev.target.result + '" alt="صورة"><button class="item-photo-remove" onclick="removeItemPhoto(\'' + id + '\')"><i class="fas fa-times"></i></button></div>';
-        }; r.readAsDataURL(f);
-    }; inp.click();
+        }; r.readAsDataURL(f); }; inp.click();
 }
 
 function removeItemPhoto(id) { delete itemPhotos[id]; document.getElementById(id + '_photo_preview').innerHTML = ''; }
+
 function closeAbout(e) { if (e.target === e.currentTarget) document.getElementById('aboutModal').style.display = 'none'; }
 
 function showScreen(id) {
@@ -116,9 +108,8 @@ function changeCapacityUnit() { document.getElementById('actualUnit').textConten
 function calculateCapacity() {
     var de = parseFloat(document.getElementById('designCapacity').value), ac = parseFloat(document.getElementById('actualCapacity').value);
     var c = document.getElementById('capacityBarContainer'), f = document.getElementById('capacityFill'), t = document.getElementById('capacityText');
-    if (de > 0 && ac >= 0) {
-        var p = Math.round((ac/de)*100); c.style.display = 'block'; f.style.width = Math.min(p,100)+'%'; f.textContent = p+'%'; f.className = 'capacity-fill';
-        if (p > 100) { f.classList.add('danger'); t.textContent = '⚠️ تجاوز '+(p-100)+'%'; t.style.color = '#dc2626'; }
+    if (de > 0 && ac >= 0) { var p = Math.round((ac/de)*100); c.style.display = 'block'; f.style.width = Math.min(p,100)+'%'; f.textContent = p+'%'; f.className = 'capacity-fill';
+        if (p > 100) { f.classList.add('danger'); t.textContent = '⚠️ تجاوز '+( p-100)+'%'; t.style.color = '#dc2626'; }
         else if (p > 85) { f.classList.add('warning'); t.textContent = 'نسبة '+p+'%'; t.style.color = '#f59e0b'; }
         else { t.textContent = 'نسبة '+p+'%'; t.style.color = '#0d9488'; }
     } else c.style.display = 'none';
@@ -173,78 +164,17 @@ function collectInspectionData() {
     }); return d;
 }
 
-// ===========================
-// رفع على Nextcloud WebDAV
-// ===========================
-function getNextcloudHeaders() {
-    return {
-        'Authorization': 'Basic ' + btoa(NC_USER + ':' + NC_PASS),
-        'Content-Type': 'application/octet-stream'
-    };
-}
-
-function uploadToNextcloud(path, content, contentType) {
-    var url = NC_URL + '/remote.php/dav/files/' + encodeURIComponent(NC_USER) + path;
-    return fetch(url, {
-        method: 'PUT',
-        headers: {
-            'Authorization': 'Basic ' + btoa(NC_USER + ':' + NC_PASS),
-            'Content-Type': contentType || 'application/octet-stream'
-        },
-        body: content
-    }).then(function(r) {
-        if (r.ok || r.status === 201 || r.status === 204) {
-            return true;
-        } else {
-            throw new Error('فشل الرفع: ' + r.status);
-        }
-    });
-}
-
-function createFolderIfNotExists(folderPath) {
-    var url = NC_URL + '/remote.php/dav/files/' + encodeURIComponent(NC_USER) + folderPath;
-    return fetch(url, {
-        method: 'MKCOL',
-        headers: { 'Authorization': 'Basic ' + btoa(NC_USER + ':' + NC_PASS) }
-    }).then(function() { return true; }).catch(function() { return true; });
-}
-
-function uploadPDFToNextcloud(pdfBlob, fileName) {
-    var path = NC_REPORTS_FOLDER + '/' + fileName;
-    return createFolderIfNotExists(NC_REPORTS_FOLDER).then(function() {
-        return uploadToNextcloud(path, pdfBlob, 'application/pdf');
-    }).then(function() {
-        showToast('✅ تم رفع PDF على Nextcloud');
-        return true;
-    }).catch(function(err) {
-        console.log('خطأ في رفع PDF:', err);
-        showToast('⚠️ تم الحفظ محلياً - تعذر رفع PDF', true);
-        return false;
-    });
-}
-
-function uploadCSVToNextcloud() {
-    var csv = localStorage.getItem('csvReports') || 'التاريخ,الوقت,المفتش,نوع المحطة,اسم المحطة,الفرع,الموقع,الحالة,الخطورة,الملاحظات,التوصيات\n';
-    var blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
-    return uploadToNextcloud(NC_CSV_PATH, blob, 'text/csv').then(function() {
-        console.log('تم رفع CSV');
-        return true;
-    }).catch(function(err) {
-        console.log('خطأ في رفع CSV:', err);
-        return false;
-    });
-}
-
 function sendToGoogleSheets(r) {
     try { fetch(API_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
         body:JSON.stringify({date:r.date,time:r.time,inspectorName:r.inspectorName,stationType:r.stationType,stationName:r.stationName,branch:r.branch,stationLocation:r.stationLocation,overallStatus:r.overallStatus,notes:r.notes})}); } catch(e){}
 }
 
-function updateCSVData(r) {
+function autoSaveCSV(r) {
     var csv = localStorage.getItem('csvReports') || 'التاريخ,الوقت,المفتش,نوع المحطة,اسم المحطة,الفرع,الموقع,الحالة,الخطورة,الملاحظات,التوصيات\n';
     csv += '"'+r.date+'","'+r.time+'","'+r.inspectorName+'","'+r.stationType+'","'+r.stationName+'","'+r.branch+'","'+r.stationLocation+'","'+r.overallStatus+'","'+r.severity+'","'+(r.notes||'').replace(/"/g,'""')+'","'+(r.recommendations||'').replace(/"/g,'""')+'"\n';
-    localStorage.setItem('csvReports', csv);
-    return csv;
+    localStorage.setItem('csvReports',csv);
+    var blob = new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'});
+    var link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = 'data-123.csv'; link.click();
 }
 
 function saveReport() {
@@ -270,20 +200,12 @@ function saveReport() {
         photos:currentPhotos, createdAt:new Date().toISOString()
     };
 
-    reports.unshift(report);
-    localStorage.setItem('waterReports', JSON.stringify(reports));
-    updateStats();
-    sendToGoogleSheets(report);
-    updateCSVData(report);
-    uploadCSVToNextcloud();
-    showToast('تم حفظ التقرير بنجاح ✅');
-    return report;
+    reports.unshift(report); localStorage.setItem('waterReports',JSON.stringify(reports));
+    updateStats(); sendToGoogleSheets(report); autoSaveCSV(report);
+    showToast('تم حفظ التقرير بنجاح ✅'); return report;
 }
 
-function saveAndExportPDF() {
-    var report = saveReport();
-    if (report) { showToast('⏳ جاري تجهيز PDF...'); setTimeout(function(){ generatePDF(report); }, 1000); }
-}
+function saveAndExportPDF() { var r=saveReport(); if(r){showToast('⏳ جاري تجهيز PDF...');setTimeout(function(){generatePDF(r);},1000);} }
 
 function generatePDF(report) {
     var sc=report.overallStatus==='مطابق'?'pdf-compliant':report.overallStatus==='غير مطابق'?'pdf-non-compliant':'pdf-follow-up';
@@ -307,7 +229,6 @@ function generatePDF(report) {
         phHTML='<div class="pdf-section"><h3>📷 صور عامة للمحطة ('+report.photos.length+' صورة)</h3><div style="display:flex;flex-wrap:wrap;gap:0;">'+pg+'</div></div>';}
 
     var df=new Date(report.date+'T00:00:00').toLocaleDateString('ar-EG',{year:'numeric',month:'long',day:'numeric'});
-    var fileName = 'report_' + report.stationName + '_' + report.date + '.pdf';
 
     var t='<div class="pdf-content"><div class="pdf-header"><div class="pdf-header-logos">'+
         '<img src="'+LOGO_HOLDING+'" style="width:70px;height:70px;object-fit:contain;border-radius:8px;background:#fff;padding:4px;border:2px solid rgba(255,255,255,.3);display:block;">'+
@@ -335,32 +256,16 @@ function generatePDF(report) {
         phHTML+
         '<div class="pdf-footer"><p>الشركة القابضة لمياه الشرب والصرف الصحي</p><p>الإدارة العامة للسلامة والصحة المهنية والطوارئ والأزمات</p><p>'+new Date().toLocaleDateString('ar-EG')+' - '+new Date().toLocaleTimeString('ar-EG')+'</p></div></div>';
 
-    var td=document.getElementById('pdfTemplate'); td.innerHTML=t; td.style.display='block';
-
+    var td=document.getElementById('pdfTemplate');td.innerHTML=t;td.style.display='block';
     html2pdf().set({
         margin:[10,10,15,10],
-        filename: fileName,
+        filename:'reports_'+report.stationName+'_'+report.date+'.pdf',
         image:{type:'jpeg',quality:0.95},
         html2canvas:{scale:2,useCORS:true,scrollY:0},
         jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
         pagebreak:{mode:['avoid-all','css','legacy']}
-    }).from(td).outputPdf('blob').then(function(pdfBlob) {
-        td.style.display = 'none';
-
-        // تنزيل محلي
-        var link = document.createElement('a');
-        link.href = URL.createObjectURL(pdfBlob);
-        link.download = fileName;
-        link.click();
-
-        // رفع على Nextcloud
-        uploadPDFToNextcloud(pdfBlob, fileName).then(function() {
-            showScreen('mainScreen');
-        });
-    }).catch(function() {
-        td.style.display='none';
-        showToast('خطأ في تصدير PDF',true);
-    });
+    }).from(td).save().then(function(){td.style.display='none';showToast('تم تصدير PDF بنجاح 📄');showScreen('mainScreen');})
+    .catch(function(){td.style.display='none';showToast('خطأ في تصدير PDF',true);});
 }
 
 function renderReportsList() {
@@ -387,13 +292,16 @@ function viewReport(id) {
         capH='<div class="detail-row"><span class="detail-label">الطاقة التصميمية</span><span class="detail-value">'+r.designCapacity.toLocaleString()+' '+unit+'</span></div><div class="detail-row"><span class="detail-label">الطاقة الفعلية</span><span class="detail-value">'+r.actualCapacity.toLocaleString()+' '+unit+'</span></div><div class="detail-row"><span class="detail-label">نسبة التشغيل</span><span class="detail-value" style="color:'+col+';font-weight:700;">'+pct+'%</span></div>';}
     var isoC='<div class="detail-row"><span class="detail-label">شهادة الايزو</span><span class="detail-value"><span class="cert-badge '+(r.isoStatus==='حاصلة'?'has-cert':'no-cert')+'">'+(r.isoStatus==='حاصلة'?'✅':'❌')+' '+r.isoStatus+(r.isoStatus==='حاصلة'&&r.isoType?' - '+r.isoType:'')+(r.isoStatus==='حاصلة'&&r.isoYear?' - '+r.isoYear:'')+'</span></span></div>';
     var tsmC='<div class="detail-row"><span class="detail-label">شهادة TSM</span><span class="detail-value"><span class="cert-badge '+(r.tsmStatus==='حاصلة'?'has-cert':'no-cert')+'">'+(r.tsmStatus==='حاصلة'?'✅':'❌')+' '+r.tsmStatus+(r.tsmStatus==='حاصلة'&&r.tsmYear?' - '+r.tsmYear:'')+'</span></span></div>';
+
     var itemsH='';
     if(r.inspectionData){var idx=0;for(var k in r.inspectionData){var it=r.inspectionData[k];idx++;
         var ic=it.type==='crane',scl=ic?(it.status==='يوجد'?'status-exist':'status-not'):(it.status==='مطابق'?'status-ok':'status-nok');
         var icon=ic?(it.status==='يوجد'?'✅':'⛔'):(it.status==='مطابق'?'✅':'❌');
         itemsH+='<div class="detail-item-row"><div class="detail-item-header"><span class="detail-item-num '+(ic?'crane-num':'')+'">'+idx+'</span><span class="detail-item-name">'+it.label+'</span><span class="detail-item-status '+scl+'">'+icon+' '+it.status+'</span></div>'+(it.notes?'<div class="detail-item-notes">'+it.notes+'</div>':'')+(it.photo?'<img class="detail-item-photo" src="'+it.photo+'" alt="صورة">':'')+'</div>';}}
+
     var phH='';
     if(r.photos&&r.photos.length>0){phH='<div class="detail-section"><h3><i class="fas fa-camera"></i> صور عامة للمحطة</h3><div class="detail-photos">'+r.photos.map(function(p){return '<img src="'+p.data+'" alt="صورة">';}).join('')+'</div></div>';}
+
     var sb=r.overallStatus==='مطابق'?'badge-compliant':r.overallStatus==='غير مطابق'?'badge-non-compliant':'badge-follow-up';
 
     document.getElementById('reportDetail').innerHTML=

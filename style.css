@@ -203,6 +203,7 @@ body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:var(--bg);color:v
 .toast{position:fixed;bottom:-70px;left:50%;transform:translateX(-50%);background:var(--success);color:#fff;padding:14px 28px;border-radius:30px;display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px;transition:bottom .35s cubic-bezier(.34,1.56,.64,1);z-index:9999;box-shadow:0 6px 20px rgba(0,0,0,.25);white-space:nowrap}
 .toast.show{bottom:30px}
 
+/* PDF styles */
 .pdf-content{font-family:Arial,sans-serif;direction:rtl;padding:30px;color:#333}
 .pdf-header{text-align:center;padding:20px;background:linear-gradient(135deg,#1a73e8,#0d47a1);color:#fff;border-radius:10px;margin-bottom:20px}
 .pdf-header-logos{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:10px}
@@ -212,19 +213,27 @@ body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:var(--bg);color:v
 .pdf-header-titles h2{font-size:13px;opacity:.9;margin-bottom:6px}
 .pdf-header-titles h3{font-size:12px;opacity:.85}
 .pdf-header .pdf-meta{font-size:12px;opacity:.85;background:rgba(255,255,255,.15);padding:6px 16px;border-radius:20px;display:inline-block;margin-top:10px}
-.pdf-section{margin-bottom:15px;padding:15px;border:1px solid #e0e0e0;border-radius:8px}
+
+.pdf-section{margin-bottom:15px;padding:15px;border:1px solid #e0e0e0;border-radius:8px;page-break-inside:avoid}
 .pdf-section h3{color:#1a73e8;border-bottom:2px solid #e8f0fe;padding-bottom:8px;margin-bottom:12px;font-size:14px}
+
 .pdf-table{width:100%;border-collapse:collapse}
 .pdf-table td{padding:8px 12px;border-bottom:1px solid #f0f0f0;font-size:13px;vertical-align:middle}
 .pdf-table td:first-child{color:#666;width:40%;font-weight:500}
+
 .pdf-status-badge{display:inline-block;padding:4px 12px;border-radius:15px;font-size:12px;font-weight:bold}
 .pdf-compliant{background:#d1fae5;color:#0d9488}.pdf-non-compliant{background:#fee2e2;color:#dc2626}.pdf-follow-up{background:#fef3c7;color:#f59e0b}.pdf-exist{background:#ede9fe;color:#7c3aed}.pdf-not-exist{background:#fef3c7;color:#f59e0b}
-.pdf-items-table{width:100%;border-collapse:collapse;font-size:12px}
+
+.pdf-items-table{width:100%;border-collapse:collapse;font-size:12px;page-break-inside:auto}
+.pdf-items-table thead{display:table-header-group}
+.pdf-items-table tr{page-break-inside:avoid;page-break-after:auto}
 .pdf-items-table th{background:#e8f0fe;color:#1a73e8;padding:8px 10px;text-align:right;border:1px solid #e0e0e0;font-size:12px}
 .pdf-items-table td{padding:8px 10px;border:1px solid #f0f0f0;vertical-align:top;font-size:12px}
 .pdf-items-table tr:nth-child(even) td{background:#fafafa}
+
 .pdf-capacity-bar{height:20px;background:#e2e8f0;border-radius:10px;overflow:hidden;margin:6px 0}
 .pdf-capacity-fill{height:100%;border-radius:10px;text-align:center;color:#fff;font-size:11px;line-height:20px;font-weight:bold}
+
 .pdf-footer{text-align:center;margin-top:20px;padding-top:15px;border-top:2px solid #e0e0e0;color:#999;font-size:11px;line-height:1.8}
 
 @media(max-width:600px){

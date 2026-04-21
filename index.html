@@ -78,9 +78,9 @@
             <img src="logo-safety.png" alt="شعار" class="report-title-logo">
         </div>
         <div class="report-title-details">
+            <div class="title-detail-item"><i class="fas fa-building"></i><span id="reportCompanyDisplay">--</span></div>
             <div class="title-detail-item"><i class="fas fa-calendar-alt"></i><span id="reportDateDisplay">--</span></div>
             <div class="title-detail-item"><i class="fas fa-industry"></i><span id="reportStationDisplay">--</span></div>
-            <div class="title-detail-item"><i class="fas fa-building"></i><span id="reportCompanyDisplay">--</span></div>
         </div>
     </div>
 
@@ -141,9 +141,8 @@
                 <div class="form-group"><label for="stationName"><i class="fas fa-map-pin"></i> اسم المحطة</label><input type="text" id="stationName" placeholder="أدخل اسم المحطة" required oninput="updateTitleStation()"></div>
             </div>
 
-            <!-- الفرع + الموقع في سطر واحد -->
             <div class="form-row">
-                <div class="form-group"><label for="branch"><i class="fas fa-code-branch"></i> الفرع</label><input type="text" id="branch" placeholder="أدخل اسم الفرع" required></div>
+                <div class="form-group"><label for="branch"><i class="fas fa-code-branch"></i> الفرع</label><input type="text" id="branch" placeholder="أدخل اسم الفرع" required oninput="updateTitleStation()"></div>
                 <div class="form-group"><label for="stationLocation"><i class="fas fa-map-marker-alt"></i> الموقع</label>
                     <div class="input-with-btn"><input type="text" id="stationLocation" placeholder="الموقع أو GPS" required><button type="button" class="input-btn" onclick="getGPSLocation()"><i class="fas fa-crosshairs"></i> GPS</button></div></div>
             </div>

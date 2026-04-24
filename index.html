@@ -159,17 +159,30 @@
                 <div class="form-group"><label for="safetyOfficer"><i class="fas fa-hard-hat"></i> مسؤول السلامة</label><input type="text" id="safetyOfficer" placeholder="اسم مسؤول السلامة" required></div>
                 <div class="form-group"><label for="stationManager"><i class="fas fa-user-shield"></i> مدير المحطة</label><input type="text" id="stationManager" placeholder="اسم مدير المحطة" required></div>
             </div>
-            <div class="form-row-three">
-                <div class="form-group"><label for="isoStatus"><i class="fas fa-certificate"></i> شهادة الايزو</label><select id="isoStatus" onchange="toggleYearField('isoStatus','isoYear','isoYearMsg');toggleIsoType()"><option value="غير حاصلة">غير حاصلة</option><option value="حاصلة">حاصلة</option></select></div>
+            <div class="form-row-four">
+                <div class="form-group">
+                <div class="form-group-header">
+                    <label for="isoStatus"><i class="fas fa-certificate"></i> شهادة الايزو</label>
+                    <button type="button" class="btn-icon-small btn-icon-add" onclick="addIsoRow()" title="إضافة شهادة ايزو أخرى"><i class="fas fa-plus"></i></button>
+                </div>
+                <select id="isoStatus" onchange="toggleYearField('isoStatus','isoYear','isoYearMsg');toggleIsoType()">
+                    <option value="غير حاصلة">غير حاصلة</option>
+                    <option value="حاصلة">حاصلة</option>
+                </select>
+            </div>
                 <div class="form-group"><label for="isoType"><i class="fas fa-tag"></i> نوع الايزو</label><input type="text" id="isoType" placeholder="ISO 9001" style="display:none;"><div class="no-cert-msg" id="isoTypeMsg"><i class="fas fa-info-circle"></i> غير حاصلة</div></div>
-                <div class="form-group"><label for="isoYear"><i class="fas fa-calendar-check"></i> سنة الحصول</label><input type="number" id="isoYear" placeholder="2022" min="2000" max="2100" style="display:none;"><div class="no-cert-msg" id="isoYearMsg"><i class="fas fa-info-circle"></i> غير حاصلة</div></div>
+                <div class="form-group"><label for="isoYear"><i class="fas fa-calendar-check"></i> آخر تجديد</label><input type="number" id="isoYear" placeholder="2022" min="2000" max="2100" style="display:none;" oninput="updateIsoValidity('')"><div class="no-cert-msg" id="isoYearMsg"><i class="fas fa-info-circle"></i> غير حاصلة</div></div>
+                <div class="form-group"><label><i class="fas fa-clock"></i> الصلاحية</label><div id="isoValidity" class="validity-display no-cert">غير حاصلة</div></div>
             </div>
-            <div class="form-row">
-                <div class="form-group"><label for="tsmStatus"><i class="fas fa-award"></i> شهادة TSM</label><select id="tsmStatus" onchange="toggleYearField('tsmStatus','tsmYear','tsmYearMsg')"><option value="غير حاصلة">غير حاصلة</option><option value="حاصلة">حاصلة</option></select></div>
-                <div class="form-group"><label for="tsmYear"><i class="fas fa-calendar-check"></i> سنة الحصول</label><input type="number" id="tsmYear" placeholder="2023" min="2000" max="2100" style="display:none;"><div class="no-cert-msg" id="tsmYearMsg"><i class="fas fa-info-circle"></i> غير حاصلة</div></div>
+            <div id="additionalIsoContainer" style="margin-top:0;"></div>
+            <div class="form-row-three">
+                <div class="form-group"><label for="tsmStatus"><i class="fas fa-award"></i> شهادة TSM</label><select id="tsmStatus" onchange="toggleYearField('tsmStatus','tsmYear','tsmYearMsg');updateTsmValidity()"><option value="غير حاصلة">غير حاصلة</option><option value="حاصلة">حاصلة</option></select></div>
+                <div class="form-group"><label for="tsmYear"><i class="fas fa-calendar-check"></i> آخر تجديد</label><input type="number" id="tsmYear" placeholder="2023" min="2000" max="2100" style="display:none;" onchange="updateTsmValidity()"><div class="no-cert-msg" id="tsmYearMsg"><i class="fas fa-info-circle"></i> غير حاصلة</div></div>
+                <div class="form-group"><label><i class="fas fa-clock"></i> صلاحية الشهادة</label><div id="tsmValidity" class="validity-display no-cert">غير حاصلة</div></div>
             </div>
-            <div class="form-row">
-                <div class="form-group"><label for="wspStatus"><i class="fas fa-shield-alt"></i> شهادة سلامة ومأمونية المياه WSP</label><select id="wspStatus" onchange="toggleYearField('wspStatus','wspYear','wspYearMsg')"><option value="غير حاصلة">غير حاصلة</option><option value="حاصلة">حاصلة</option></select></div>
+            <div class="form-row-three">
+                <div class="form-group"><label for="civilDefenseStatus"><i class="fas fa-fire-extinguisher"></i> تقرير الحماية المدنية</label><select id="civilDefenseStatus"><option value="غير حاصلة">غير حاصلة</option><option value="حاصلة">حاصلة</option></select></div>
+                <div class="form-group"><label for="wspStatus"><i class="fas fa-shield-alt"></i> شهادة سلامة ومأمونية المياه</label><select id="wspStatus" onchange="toggleYearField('wspStatus','wspYear','wspYearMsg')"><option value="غير حاصلة">غير حاصلة</option><option value="حاصلة">حاصلة</option></select></div>
                 <div class="form-group"><label for="wspYear"><i class="fas fa-calendar-check"></i> سنة الحصول</label><input type="number" id="wspYear" placeholder="2024" min="2000" max="2100" style="display:none;"><div class="no-cert-msg" id="wspYearMsg"><i class="fas fa-info-circle"></i> غير حاصلة</div></div>
             </div>
         </div>

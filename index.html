@@ -177,7 +177,7 @@
             <div id="additionalIsoContainer" style="margin-top:0;"></div>
             <div class="form-row-three">
                 <div class="form-group"><label for="tsmStatus"><i class="fas fa-award"></i> شهادة TSM</label><select id="tsmStatus" onchange="toggleYearField('tsmStatus','tsmYear','tsmYearMsg');updateTsmValidity()"><option value="غير حاصلة">غير حاصلة</option><option value="حاصلة">حاصلة</option></select></div>
-                <div class="form-group"><label for="tsmYear"><i class="fas fa-calendar-check"></i> آخر تجديد</label><input type="number" id="tsmYear" placeholder="2023" min="2000" max="2100" style="display:none;" onchange="updateTsmValidity()"><div class="no-cert-msg" id="tsmYearMsg"><i class="fas fa-info-circle"></i> غير حاصلة</div></div>
+                <div class="form-group"><label for="tsmYear"><i class="fas fa-calendar-check"></i> آخر تجديد</label><input type="number" id="tsmYear" placeholder="2023" min="2000" max="2100" style="display:none;" onchange="updateTsmValidity()" oninput="updateTsmValidity()"><div class="no-cert-msg" id="tsmYearMsg"><i class="fas fa-info-circle"></i> غير حاصلة</div></div>
                 <div class="form-group"><label><i class="fas fa-clock"></i> صلاحية الشهادة</label><div id="tsmValidity" class="validity-display no-cert">غير حاصلة</div></div>
             </div>
             <div class="form-row-three">

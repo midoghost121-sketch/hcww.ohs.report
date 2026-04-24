@@ -265,6 +265,7 @@ body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:var(--bg);color:v
 .stats-container{gap:8px}.stat-card{padding:12px 8px}.stat-number{font-size:22px}.stat-label{font-size:10px}
 .form-row{grid-template-columns:1fr}
 .form-row-three{grid-template-columns:1fr}
+.form-row-four{grid-template-columns:1fr}
 .severity-buttons{grid-template-columns:repeat(2,1fr)}
 .form-actions{flex-direction:column}
 .photo-preview-grid{grid-template-columns:repeat(3,1fr)}

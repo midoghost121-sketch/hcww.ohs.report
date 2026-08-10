@@ -9,7 +9,18 @@
     <title>تقارير المرور على المحطات - الشركة القابضة لمياه الشرب والصرف الصحي</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="logos.js"></script>
+    <script src="app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+    /* Team list styling: compact, one name per line, right-aligned, no extra leading space */
+    #teamList{padding:0;margin:0;background:#fff}
+    #teamList .team-item{display:flex;justify-content:space-between;align-items:center;padding:6px 8px;margin:0;border-bottom:1px solid #f1f5f9;font-size:14px}
+    #teamList .team-name{flex:1;text-align:right;direction:rtl;color:#0f172a}
+    #teamList input[type=checkbox]{width:18px;height:18px;margin:0 0 0 8px}
+    /* make the selector button and list visually consistent with app */
+    .multi-select .multi-list{background:transparent}
+    </style>
 </head>
 <body>
 
@@ -21,17 +32,39 @@
             <h2>تطبيق تقارير المرور على المحطات</h2>
         </div>
         <div class="about-body">
-            <div class="about-item"><span class="about-icon">🔢</span><div><strong>الإصدار:</strong> 1.0.0</div></div>
-            <div class="about-item"><span class="about-icon">📅</span><div><strong>تاريخ الإصدار:</strong> أبريل 2026</div></div>
+            <div class="about-item"><span class="about-icon">�</span><div><strong>حول التطبيق</strong></div></div>
+            <div class="about-item"><span class="about-icon">📌</span><div><strong>الإصدار:</strong> 1.1.0</div></div>
+            <div class="about-item"><span class="about-icon">📅</span><div>مايو 2026</div></div>
             <div class="about-divider"></div>
-            <div class="about-item"><span class="about-icon">🏢</span><div><strong>تم التصميم والتنفيذ بواسطة:</strong><br>الإدارة العامة للسلامة والصحة المهنية<br>بالشركة القابضة لمياه الشرب والصرف الصحي</div></div>
+            <div class="about-item"><span class="about-icon">🆕</span><div><strong>التحديثات الجديدة</strong><ul><li>تم إضافة وحدة "خطة المرور للمأمورية" والتي تتيح إعداد خطة مأمورية متكاملة قبل التنفيذ، وتشمل:</li><li>تحديد فترة المأمورية وحساب مدتها تلقائيًا</li><li>تنظيم المواقع المستهدفة على أيام الزيارة</li><li>اختيار فريق العمل بطريقة تفاعلية</li><li>إدخال أهداف المأمورية بشكل مرقم تلقائيًا</li><li>توليد خطة مرور جاهزة للطباعة أو التصدير</li></ul></div></div>
+            <div class="about-item"><span class="about-icon">🎯</span><div><strong>أهداف التحديث</strong><ul><li>تحسين التخطيط المسبق للمأموريات</li><li>رفع كفاءة تنظيم الزيارات الميدانية</li><li>توحيد أسلوب إعداد خطط المرور</li><li>دعم اتخاذ القرار بناءً على بيانات دقيقة</li><li>تعزيز التحول الرقمي في أعمال السلامة والصحة المهنية</li></ul></div></div>
+            <div class="about-divider"></div>
+            <div class="about-item"><span class="about-icon">📌</span><div><strong>الإصدار:</strong> 1.0.0</div></div>
+            <div class="about-item"><span class="about-icon">📅</span><div>أبريل 2026</div></div>
+            <div class="about-divider"></div>
+            <div class="about-item"><span class="about-icon">🏢</span><div><strong>تم التنفيذ بواسطة:</strong><br>الإدارة العامة للسلامة والصحة المهنية<br>بالشركة القابضة لمياه الشرب والصرف الصحي</div></div>
             <div class="about-item"><span class="about-icon">👨‍💻</span><div><strong>المطور:</strong><br>م / أحمد الدسوقي<br>📧 ahmed.eldesoky@hcww.com.eg</div></div>
             <div class="about-item"><span class="about-icon">🖥️</span><div><strong>تحت إشراف:</strong><br>الإدارة العامة لتكنولوجيا المعلومات<br>بالشركة القابضة لمياه الشرب والصرف الصحي</div></div>
             <div class="about-divider"></div>
-            <div class="about-item"><span class="about-icon">🎯</span><div><strong>أهداف التطبيق:</strong><ul><li>توحيد نموذج تقارير المرور</li><li>تسهيل إدخال البيانات ميدانيًا</li><li>متابعة الملاحظات والإجراءات التصحيحية</li><li>دعم التحول الرقمي داخل الشركة</li></ul></div></div>
+            <div class="about-item"><span class="about-icon">🎯</span><div><strong>أهداف التطبيق:</strong><ul><li>توحيد تقارير المرور</li><li>تسهيل إدخال البيانات ميدانيًا</li><li>متابعة الملاحظات والإجراءات التصحيحية</li><li>دعم التحول الرقمي</li></ul></div></div>
             <div class="about-item"><span class="about-icon">👥</span><div><strong>الفئة المستهدفة:</strong><br>فرق التفتيش – مسؤولي السلامة والصحة المهنية – إدارات التشغيل</div></div>
             <div class="about-divider"></div>
             <div class="about-footer">© جميع الحقوق محفوظة للشركة القابضة لمياه الشرب والصرف الصحي © 2026</div>
+        </div>
+    </div>
+</div>
+
+<div id="saveConfirmModal" class="modal-overlay" style="display:none;" onclick="closeSaveConfirm(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <button class="modal-close" onclick="document.getElementById('saveConfirmModal').style.display='none'"><i class="fas fa-times"></i></button>
+        <div class="about-header">
+            <div class="about-logos"><img src="logo-holding.png" class="about-logo"><img src="logo-safety.png" class="about-logo"></div>
+            <h2>تم حفظ التقرير بنجاح</h2>
+        </div>
+        <div class="about-body" style="text-align:center">
+            <p style="font-size:15px;margin-bottom:20px;line-height:1.8;">تم حفظ التقرير في قسم التقارير السابقة بنجاح.</p>
+            <button class="btn btn-primary" style="width:100%;margin-bottom:10px;" onclick="document.getElementById('saveConfirmModal').style.display='none';showScreen('reportsList');">عرض التقارير السابقة</button>
+            <button class="btn btn-secondary" style="width:100%;" onclick="document.getElementById('saveConfirmModal').style.display='none';">موافق</button>
         </div>
     </div>
 </div>
@@ -56,11 +89,99 @@
         <div class="stat-card non-compliant"><i class="fas fa-times-circle"></i><div class="stat-info"><span class="stat-number" id="nonCompliantCount">0</span><span class="stat-label">غير مطابق</span></div></div>
     </div>
     <div class="action-buttons">
+        <button class="btn btn-primary btn-large btn-route-plan" onclick="showScreen('routePlan')"><i class="fas fa-plus"></i> خطة مرور</button>
+        
         <button class="btn btn-primary btn-large" onclick="showScreen('newReport')"><i class="fas fa-plus-circle"></i> تقرير جديد</button>
         <button class="btn btn-secondary btn-large" onclick="showScreen('reportsList')"><i class="fas fa-folder-open"></i> التقارير السابقة</button>
+        <button class="btn btn-secondary btn-large" onclick="showScreen('plansList')"><i class="fas fa-map"></i> خطط المأموريات السابقة</button>
         <button class="btn btn-about" onclick="document.getElementById('aboutModal').style.display='flex'"><i class="fas fa-question-circle"></i> حول التطبيق</button>
     </div>
 </div>
+
+<!-- Route Plan Screen -->
+<div id="routePlan" class="screen">
+    <div class="screen-header">
+        <button class="btn-back" onclick="showScreen('mainScreen')"><i class="fas fa-arrow-right"></i></button>
+        <h2><i class="fas fa-route"></i> خطة مرور</h2>
+    </div>
+    <form id="routePlanForm" class="form-container">
+        <div class="form-section">
+            <h3><i class="fas fa-info-circle"></i> بيانات المأمورية</h3>
+            <div class="form-row">
+                <div class="form-group"><label><i class="fas fa-calendar-alt"></i> الفترة (من - إلى)</label>
+                    <div style="display:flex;gap:8px;align-items:center;"><input type="date" id="planStart" required onchange="updatePlanDuration()"><span>—</span><input type="date" id="planEnd" required onchange="updatePlanDuration()"></div>
+                    <div style="margin-top:6px;color:#334155">مدة المأمورية: <span id="planDuration">0</span> يوم</div>
+                </div>
+                <div class="form-group"><label><i class="fas fa-list"></i> نوع المأمورية</label>
+                    <select id="planType"><option value="تدريب عاملين">تدريب عاملين</option><option value="مرور">مرور</option><option value="تحليل بيانات">تحليل بيانات</option><option value="تدريب ISO">تدريب ISO</option><option value="تأهيل TSM">تأهيل TSM</option><option value="طوارئ وأزمات">طوارئ وأزمات</option></select></div>
+            </div>
+
+            <div class="form-group form-group-full">
+                <label><i class="fas fa-building"></i> الشركة / الجهة</label>
+                <select id="planCompany" required>
+                    <option value="">اختر الشركة</option>
+                    <option value="مياه القاهرة">مياه القاهرة</option>
+                    <option value="صرف القاهرة">صرف القاهرة</option>
+                    <option value="الجيزة">الجيزة</option>
+                    <option value="مياه الإسكندرية">مياه الإسكندرية</option>
+                    <option value="صرف الإسكندرية">صرف الإسكندرية</option>
+                    <option value="الدقهلية">الدقهلية</option>
+                    <option value="مرسى مطروح">مرسى مطروح</option>
+                    <option value="دمياط">دمياط</option>
+                    <option value="الفيوم">الفيوم</option>
+                    <option value="سوهاج">سوهاج</option>
+                    <option value="مدن القناة">مدن القناة</option>
+                    <option value="القليوبية">القليوبية</option>
+                    <option value="البحر الأحمر">البحر الأحمر</option>
+                    <option value="قنا">قنا</option>
+                    <option value="البحيرة">البحيرة</option>
+                    <option value="الأقصر">الأقصر</option>
+                    <option value="بني سويف">بني سويف</option>
+                    <option value="الشرقية">الشرقية</option>
+                    <option value="الغربية">الغربية</option>
+                    <option value="المنوفية">المنوفية</option>
+                    <option value="كفر الشيخ">كفر الشيخ</option>
+                    <option value="أسيوط">أسيوط</option>
+                    <option value="المنيا">المنيا</option>
+                    <option value="أسوان">أسوان</option>
+                    <option value="سيناء">سيناء</option>
+                </select>
+            </div>
+
+            <div class="form-group form-group-full">
+                <label><i class="fas fa-users"></i> فريق العمل (اختر واحداً على الأقل)</label>
+                <div id="teamSelector" class="multi-select">
+                    <button type="button" class="btn btn-secondary btn-small" onclick="toggleTeamList()">اختر أعضاء الفريق</button>
+                    <div id="teamList" class="multi-list" style="display:none;margin-top:8px;border:1px solid #e2e8f0;padding:8px;border-radius:6px;max-height:160px;overflow:auto;"></div>
+                    <div style="margin-top:8px;color:#334155">المختارون: <span id="selectedTeamDisplay">لا أحد</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3><i class="fas fa-map-marker-alt"></i> المواقع المستهدفة</h3>
+            <div id="daysContainer"></div>
+            <div style="margin-top:10px;display:flex;gap:8px;">
+                <button type="button" class="btn btn-primary btn-small" onclick="addDay()"><i class="fas fa-plus"></i> إضافة يوم جديد</button>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3><i class="fas fa-bullseye"></i> أهداف المأمورية</h3>
+            <div id="goalsEditor" class="goals-editor" contenteditable="true" style="min-height:80px;padding:8px;border:1px solid #e2e8f0;border-radius:6px;">
+                1- 
+            </div>
+            <div style="margin-top:8px;color:#64748b">اضغط Enter لإضافة هدف جديد مرقم تلقائيًا.</div>
+        </div>
+
+        <div class="form-actions">
+            <button type="button" class="btn btn-success btn-large" onclick="saveRoutePlan()"><i class="fas fa-save"></i> حفظ خطة المرور</button>
+            <button type="button" class="btn btn-primary btn-large" onclick="exportRoutePlanPDFFromForm()"><i class="fas fa-file-pdf"></i> تصدير PDF</button>
+        </div>
+    </form>
+</div>
+
+<!-- Route Plan Output screen removed -->
 
 <div id="newReport" class="screen">
     <div class="screen-header">
@@ -137,7 +258,7 @@
 
             <div class="form-row">
                 <div class="form-group"><label for="stationType"><i class="fas fa-industry"></i> نوع المحطة</label>
-                    <select id="stationType" required onchange="updateTitleStation()"><option value="">اختر نوع المحطة</option><option value="محطة تنقية مياه">محطة تنقية مياه</option><option value="محطة معالجة صرف صحي">محطة معالجة صرف صحي</option><option value="محطة تحلية مياه البحر">محطة تحلية مياه البحر</option><option value="رافع صرف صحي">رافع صرف صحي</option><option value="رافع مياه شرب">رافع مياه شرب</option></select></div>
+                    <select id="stationType" required onchange="updateTitleStation(); updateInspectionVisibility()"><option value="">اختر نوع المحطة</option><option value="محطة تنقية مياه">محطة تنقية مياه</option><option value="محطة معالجة صرف صحي">محطة معالجة صرف صحي</option><option value="محطة تحلية مياه البحر">محطة تحلية مياه البحر</option><option value="رافع صرف صحي">رافع صرف صحي</option><option value="رافع مياه شرب">رافع مياه شرب</option></select></div>
                 <div class="form-group"><label for="stationName"><i class="fas fa-map-pin"></i> اسم المحطة</label><input type="text" id="stationName" placeholder="أدخل اسم المحطة" required oninput="updateTitleStation()"></div>
             </div>
 
@@ -162,7 +283,7 @@
             <div class="form-row-four">
                 <div class="form-group">
                 <div class="form-group-header">
-                    <label for="isoStatus"><i class="fas fa-certificate"></i> شهادة الايزو</label>
+                    <label for="isoStatus"><i class="fas fa-certificate"></i> شهادة ايزو 1</label>
                     <button type="button" class="btn-icon-small btn-icon-add" onclick="addIsoRow()" title="إضافة شهادة ايزو أخرى"><i class="fas fa-plus"></i></button>
                 </div>
                 <select id="isoStatus" onchange="toggleYearField('isoStatus','isoYear','isoYearMsg');toggleIsoType()">
@@ -187,34 +308,43 @@
             </div>
         </div>
 
-        <div class="form-section" style="page-break-before:always;"><h3><i class="fas fa-clipboard-check"></i> بنود الفحص</h3><div id="inspectionItemsContainer"></div></div>
+        <div class="form-section" id="inspectionSection" style="page-break-before:always;"><h3><i class="fas fa-clipboard-check"></i> بنود الفحص</h3><div id="inspectionInfo" class="inspection-info">يرجى اختيار نوع المحطة لظهور بنود الفحص</div><div id="inspectionItemsContainer"></div></div>
 
         <div class="form-section"><h3><i class="fas fa-flag"></i> التقييم العام</h3>
-            <div class="form-row">
-                <div class="form-group"><label for="overallStatus"><i class="fas fa-flag"></i> الحالة العامة</label><select id="overallStatus" required onchange="updateOverallColor(this)"><option value="">اختر</option><option value="مطابق">✅ مطابق</option><option value="غير مطابق">❌ غير مطابق</option><option value="يحتاج متابعة">⚠️ يحتاج متابعة</option></select></div>
-                <div class="form-group"><label><i class="fas fa-exclamation-triangle"></i> درجة الخطورة</label><div class="severity-buttons"><button type="button" class="severity-btn low active" onclick="setSeverity('منخفضة',this)">منخفضة</button><button type="button" class="severity-btn medium" onclick="setSeverity('متوسطة',this)">متوسطة</button><button type="button" class="severity-btn high" onclick="setSeverity('عالية',this)">عالية</button><button type="button" class="severity-btn critical" onclick="setSeverity('حرجة',this)">حرجة</button></div><input type="hidden" id="severity" value="منخفضة"></div>
+            <div id="overallContent" style="display:none;">
+                <div class="form-row">
+                    <div class="form-group"><label for="overallStatus"><i class="fas fa-flag"></i> الحالة العامة</label><select id="overallStatus" required onchange="updateOverallColor(this)"><option value="">اختر</option><option value="مطابق">✅ مطابق</option><option value="غير مطابق">❌ غير مطابق</option><option value="يحتاج متابعة">⚠️ يحتاج متابعة</option></select></div>
+                    <div class="form-group"><label><i class="fas fa-exclamation-triangle"></i> درجة الخطورة</label><div class="severity-buttons"><button type="button" class="severity-btn low active" onclick="setSeverity('منخفضة',this)">منخفضة</button><button type="button" class="severity-btn medium" onclick="setSeverity('متوسطة',this)">متوسطة</button><button type="button" class="severity-btn high" onclick="setSeverity('عالية',this)">عالية</button><button type="button" class="severity-btn critical" onclick="setSeverity('حرجة',this)">حرجة</button></div><input type="hidden" id="severity" value="منخفضة"></div>
+                </div>
             </div>
+            <p id="overallPlaceholder" style="margin-top:10px;color:#64748b;font-size:14px;text-align:center;">يرجى اختيار نوع المحطة لظهور بنود التقييم</p>
         </div>
 
         <div class="form-section"><h3><i class="fas fa-edit"></i> الملاحظات والتوصيات</h3>
-            <div class="form-row">
-                <div class="form-group"><label for="notes"><i class="fas fa-sticky-note"></i> الملاحظات</label><textarea id="notes" rows="4" placeholder="الملاحظات..."></textarea></div>
-                <div class="form-group"><label for="recommendations"><i class="fas fa-lightbulb"></i> التوصيات</label><textarea id="recommendations" rows="4" placeholder="التوصيات..."></textarea></div>
+            <div id="notesContent" style="display:none;">
+                <div class="form-row">
+                    <div class="form-group"><label for="notes"><i class="fas fa-sticky-note"></i> الملاحظات</label><textarea id="notes" rows="4" placeholder="الملاحظات..."></textarea></div>
+                    <div class="form-group"><label for="recommendations"><i class="fas fa-lightbulb"></i> التوصيات</label><textarea id="recommendations" rows="4" placeholder="التوصيات..."></textarea></div>
+                </div>
             </div>
+            <p id="notesPlaceholder" style="margin-top:10px;color:#64748b;font-size:14px;text-align:center;">يرجى اختيار نوع المحطة لظهور الملاحظات والتوصيات</p>
         </div>
 
         <div class="form-section"><h3><i class="fas fa-camera"></i> صور عامة للمحطة</h3>
-            <div class="upload-box"><i class="fas fa-cloud-upload-alt"></i><p>صور عامة للمحطة</p><span>حد أقصى 12 صورة</span>
-                <div style="display:flex;gap:10px;margin-top:15px;justify-content:center;flex-wrap:wrap;">
-                    <button type="button" class="btn btn-primary btn-small" onclick="document.getElementById('photoInput').click()"><i class="fas fa-images"></i> معرض</button>
-                    <button type="button" class="btn btn-success btn-small" onclick="document.getElementById('cameraInput').click()"><i class="fas fa-camera"></i> كاميرا</button></div></div>
-            <input type="file" id="photoInput" accept="image/*" multiple style="display:none" onchange="handlePhotos(this)">
-            <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none" onchange="handlePhotos(this)">
-            <div id="photoPreview" class="photo-preview-grid"></div>
+            <div id="photosContent" style="display:none;">
+                <div class="upload-box"><i class="fas fa-cloud-upload-alt"></i><p>صور عامة للمحطة</p><span>حد أقصى 12 صورة</span>
+                    <div style="display:flex;gap:10px;margin-top:15px;justify-content:center;flex-wrap:wrap;">
+                        <button type="button" class="btn btn-primary btn-small" onclick="document.getElementById('photoInput').click()"><i class="fas fa-images"></i> معرض</button>
+                        <button type="button" class="btn btn-success btn-small" onclick="document.getElementById('cameraInput').click()"><i class="fas fa-camera"></i> كاميرا</button></div></div>
+                <input type="file" id="photoInput" accept="image/*" multiple style="display:none" onchange="handlePhotos(this)">
+                <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none" onchange="handlePhotos(this)">
+                <div id="photoPreview" class="photo-preview-grid"></div>
+            </div>
+            <p id="photosPlaceholder" style="margin-top:10px;color:#64748b;font-size:14px;text-align:center;">يرجى اختيار نوع المحطة لرفع صور المحطة</p>
         </div>
 
         <div class="form-actions">
-            <button type="button" class="btn btn-success btn-large" onclick="saveReport()"><i class="fas fa-save"></i> حفظ</button>
+            <button type="button" class="btn btn-success btn-large" onclick="saveReport(true)"><i class="fas fa-save"></i> حفظ</button>
             <button type="button" class="btn btn-primary btn-large" onclick="saveAndExportPDF()"><i class="fas fa-file-pdf"></i> حفظ وتصدير PDF</button>
         </div>
     </form>
@@ -224,8 +354,18 @@
     <div class="screen-header"><button class="btn-back" onclick="showScreen('mainScreen')"><i class="fas fa-arrow-right"></i></button><h2><i class="fas fa-folder-open"></i> التقارير السابقة</h2></div>
     <div class="filter-bar">
         <div class="search-box"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="بحث..." oninput="filterReports()"></div>
+        <button type="button" id="advancedSearchToggle" class="btn btn-secondary btn-small" onclick="toggleAdvancedSearch()">بحث متقدم</button>
+        <button type="button" class="btn btn-primary btn-small" onclick="exportFilteredReportsPDF()"><i class="fas fa-file-pdf"></i> تصدير PDF</button>
+    </div>
+    <div id="advancedSearchPanel" class="advanced-search-panel" style="display:none;">
         <select id="filterStatus" onchange="filterReports()"><option value="all">كل الحالات</option><option value="مطابق">مطابق</option><option value="غير مطابق">غير مطابق</option><option value="يحتاج متابعة">يحتاج متابعة</option></select>
+        <input type="date" id="filterDate" class="filter-date" onchange="filterReports()" title="بحث بتاريخ معين">
         <select id="filterCompany" onchange="filterReports()"><option value="all">كل الشركات</option></select>
+        <select id="filterStationType" onchange="filterReports()"><option value="all">كل أنواع المحطات</option><option value="محطة تنقية مياه">محطة تنقية مياه</option><option value="محطة معالجة صرف صحي">محطة معالجة صرف صحي</option><option value="محطة تحلية مياه البحر">محطة تحلية مياه البحر</option><option value="رافع صرف صحي">رافع صرف صحي</option><option value="رافع مياه شرب">رافع مياه شرب</option></select>
+        <select id="filterBranch" onchange="filterReports()"><option value="all">كل الفروع</option></select>
+        <input type="text" id="filterLocation" class="filter-text" placeholder="بحث بالموقع" oninput="filterReports()">
+        <select id="filterISO" onchange="filterReports()"><option value="all">كل الايزو</option><option value="hasIso">يوجد شهادة ISO</option><option value="noIso">لا يوجد شهادة ISO</option></select>
+        <select id="filterTSM" onchange="filterReports()"><option value="all">كل TSM</option><option value="hasTsm">يوجد شهادة TSM</option><option value="noTsm">لا يوجد شهادة TSM</option></select>
     </div>
     <div id="reportsContainer" class="reports-list"></div>
 </div>
@@ -236,8 +376,652 @@
     <div id="reportDetail" class="report-detail"></div>
 </div>
 
+<div id="plansList" class="screen">
+    <div class="screen-header"><button class="btn-back" onclick="showScreen('mainScreen')"><i class="fas fa-arrow-right"></i></button><h2><i class="fas fa-map"></i> خطط المأموريات السابقة</h2></div>
+    <div class="filter-bar">
+        <div class="search-box"><i class="fas fa-search"></i><input type="text" id="searchInputPlans" placeholder="بحث..." oninput="filterPlans()"></div>
+        <select id="filterTypePlans" onchange="filterPlans()">
+            <option value="all">كل الأنواع</option>
+            <option value="تدريب عاملين">تدريب عاملين</option>
+            <option value="مرور">مرور</option>
+            <option value="تحليل بيانات">تحليل بيانات</option>
+            <option value="تدريب ISO">تدريب ISO</option>
+            <option value="تأهيل TSM">تأهيل TSM</option>
+            <option value="طوارئ وأزمات">طوارئ وأزمات</option>
+        </select>
+        <select id="filterCompletionPlans" onchange="filterPlans()">
+            <option value="all">كل الإنجاز</option>
+            <option value="100">100% (مكتمل)</option>
+            <option value="partial">إنجاز جزئي</option>
+            <option value="0">0% (لم يبدأ)</option>
+        </select>
+        <select id="filterCompanyPlans" onchange="filterPlans()">
+            <option value="all">كل الشركات</option>
+            <option value="مياه القاهرة">مياه القاهرة</option>
+            <option value="صرف القاهرة">صرف القاهرة</option>
+            <option value="الجيزة">الجيزة</option>
+            <option value="مياه الإسكندرية">مياه الإسكندرية</option>
+            <option value="صرف الإسكندرية">صرف الإسكندرية</option>
+            <option value="الدقهلية">الدقهلية</option>
+            <option value="مرسى مطروح">مرسى مطروح</option>
+            <option value="دمياط">دمياط</option>
+            <option value="الفيوم">الفيوم</option>
+            <option value="سوهاج">سوهاج</option>
+            <option value="مدن القناة">مدن القناة</option>
+            <option value="القليوبية">القليوبية</option>
+            <option value="البحر الأحمر">البحر الأحمر</option>
+            <option value="قنا">قنا</option>
+            <option value="البحيرة">البحيرة</option>
+            <option value="الأقصر">الأقصر</option>
+            <option value="بني سويف">بني سويف</option>
+            <option value="الشرقية">الشرقية</option>
+            <option value="الغربية">الغربية</option>
+            <option value="المنوفية">المنوفية</option>
+            <option value="كفر الشيخ">كفر الشيخ</option>
+            <option value="أسيوط">أسيوط</option>
+            <option value="المنيا">المنيا</option>
+            <option value="أسوان">أسوان</option>
+            <option value="سيناء">سيناء</option>
+        </select>
+    </div>
+    <div id="plansContainer" class="reports-list"></div>
+</div>
+
+<div id="viewPlanScreen" class="screen">
+    <div class="screen-header">
+        <button class="btn-back" onclick="showScreen('plansList')"><i class="fas fa-arrow-right"></i></button>
+        <h2><i class="fas fa-file-alt"></i> تفاصيل الخطة</h2>
+        <button class="btn btn-primary btn-small" onclick="exportCurrentPlanPDF()"><i class="fas fa-file-pdf"></i> PDF</button>
+    </div>
+    <div id="planDetailContainer" class="report-detail" style="padding:18px;"></div>
+</div>
+
 <div id="pdfTemplate" style="display:none;"></div>
 <div id="successToast" class="toast"><i class="fas fa-check-circle"></i><span id="toastMessage">تم الحفظ</span></div>
 <script src="app.js"></script>
+<script>
+// خريطة عمل بسيطة لنموذج خطة المرور
+    (function(){
+    const sampleWorkers = [
+        'عميد / عمرو الشيخ',
+        'السيد فتحي عبد العاطي',
+        'محمد يحي السعدني',
+        'سعيد محمود أحمد',
+        'محمود يسري الهرماوي',
+        'أحمد يحي السعدني',
+        'خالد سعيد محمود',
+        'محمد يوسف محمود',
+        'أحمد إبراهيم الدسوقي',
+        'وجدي جمال حلاوة',
+        'مصطفي حامد خلف',
+        'أحمد محمد مصطفى',
+        'مؤمن سعودي فتحي',
+        'عبد الرازق عبد رب النبي شمس',
+        'أحمد سامي ذكي'
+    ];
+    const teamListEl = document.getElementById('teamList');
+    const selectedTeamDisplay = document.getElementById('selectedTeamDisplay');
+    const daysContainer = document.getElementById('daysContainer');
+    const goalsEditor = document.getElementById('goalsEditor');
+
+    // تهيئة قائمة العاملين
+    function renderTeamList(){
+        teamListEl.innerHTML = '';
+        sampleWorkers.forEach((w,i)=>{
+            const id = 'worker_'+i;
+            const wrapper = document.createElement('div');
+            wrapper.style.margin = '0';
+            wrapper.innerHTML = `<label class="team-item"><span class="team-name">${w}</span><input type="checkbox" id="${id}" value="${w}" onchange="updateSelectedTeam()"></label>`;
+            teamListEl.appendChild(wrapper);
+        });
+    }
+    window.updateSelectedTeam = function(){
+        const checked = Array.from(teamListEl.querySelectorAll('input[type=checkbox]:checked')).map(i=>i.value);
+        selectedTeamDisplay.textContent = checked.length? checked.join('، '): 'لا أحد';
+    }
+    window.toggleTeamList = function(){
+        teamListEl.style.display = teamListEl.style.display==='none'?'block':'none';
+    }
+
+    // مدة المأمورية
+    window.updatePlanDuration = function(){
+        const s = document.getElementById('planStart').value;
+        const e = document.getElementById('planEnd').value;
+        if(!s||!e){ document.getElementById('planDuration').textContent = '0'; return; }
+        const d1 = new Date(s), d2 = new Date(e);
+        const diff = Math.round((d2 - d1)/(1000*60*60*24)) + 1;
+        document.getElementById('planDuration').textContent = diff>0? diff: 0;
+    }
+
+    // أيام ومواقع
+    window.addDay = function(){
+        const dayIndex = daysContainer.children.length + 1;
+        const dayEl = document.createElement('div');
+        dayEl.className = 'day-block';
+        dayEl.style.border='1px dashed #cbd5e1';
+        dayEl.style.padding='10px';
+        dayEl.style.marginBottom='8px';
+        dayEl.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center"><strong>اليوم ${dayIndex}</strong><div><button type="button" class="btn btn-secondary btn-small" onclick="addSite(this)"><i class="fas fa-plus"></i> إضافة موقع</button> <button type="button" class="btn btn-danger btn-small" onclick="removeDay(this)"><i class="fas fa-trash"></i></button></div></div><div class="sites-list" style="margin-top:8px"></div>`;
+        daysContainer.appendChild(dayEl);
+        // إضافة موقع افتراضي
+        const addBtn = dayEl.querySelector('button');
+        addSite(addBtn);
+    }
+    window.addSite = function(btn){
+        const dayEl = btn.closest('.day-block');
+        const sitesList = dayEl.querySelector('.sites-list');
+        const siteIndex = sitesList.children.length + 1;
+        const div = document.createElement('div');
+        div.style.display='flex';div.style.gap='8px';div.style.marginBottom='6px';
+        div.innerHTML = `<span style="min-width:36px">موقع ${siteIndex}</span><input type="text" class="site-input" placeholder="اسم الموقع"> <button type="button" class="btn btn-danger btn-small" onclick="removeSite(this)"><i class="fas fa-trash"></i></button>`;
+        sitesList.appendChild(div);
+    }
+    window.removeSite = function(btn){
+        const sitesList = btn.closest('.sites-list');
+        const item = btn.closest('div');
+        item.remove();
+        // إعادة ترقيم
+        const labels = sitesList.querySelectorAll('span');
+        labels.forEach((s,i)=> s.textContent = `موقع ${i+1}`);
+    }
+    window.removeDay = function(btn){
+        btn.closest('.day-block').remove();
+        // إعادة ترقيم الأيام
+        Array.from(daysContainer.children).forEach((d,i)=>{
+            d.querySelector('strong').textContent = `اليوم ${i+1}`;
+        });
+    }
+
+    // محرر الأهداف: عند الضغط Enter أضف رقم جديد
+    goalsEditor.addEventListener('keydown', function(e){
+        if(e.key==='Enter'){
+            e.preventDefault();
+            const text = goalsEditor.innerText.trim();
+            const lines = text.split('\n').filter(l=>l.trim().length>0);
+            const next = lines.length + 1;
+            goalsEditor.innerText = text + '\n' + next + '- ';
+            // وضع المؤشر في نهاية
+            placeCaretAtEnd(goalsEditor);
+        }
+    });
+    function placeCaretAtEnd(el){
+        el.focus();
+        if(typeof window.getSelection != "undefined" && typeof document.createRange != "undefined"){
+            var range = document.createRange();
+            range.selectNodeContents(el);
+            range.collapse(false);
+            var sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
+        }
+    }
+
+    // حفظ الخطة
+    window.saveRoutePlan = function(){
+        // جمع البيانات
+        const start = document.getElementById('planStart').value;
+        const end = document.getElementById('planEnd').value;
+        const duration = parseInt(document.getElementById('planDuration').textContent)||0;
+        const type = document.getElementById('planType').value;
+        const company = document.getElementById('planCompany').value;
+        const team = Array.from(teamListEl.querySelectorAll('input[type=checkbox]:checked')).map(i=>i.value);
+        // أيام ومواقع
+        const days = Array.from(daysContainer.children).map((d,di)=>{
+            const sites = Array.from(d.querySelectorAll('.site-input')).map(s=>({name:s.value||'', done:false}));
+            return {dayNumber: di+1, sites};
+        });
+        // الأهداف
+        const goalsText = goalsEditor.innerText.trim();
+        const goals = goalsText.split('\n').map(l=>l.replace(/^[0-9]+-\s*/,'').trim()).filter(Boolean);
+
+        // تحقق القواعد
+        if(!company){ alert('يجب اختيار الشركة / الجهة'); return; }
+        if(!team.length){ alert('يجب اختيار عضو واحد على الأقل في فريق العمل'); return; }
+        if(days.length===0){ alert('يجب إضافة يوم واحد على الأقل'); return; }
+        const anySite = days.some(d=>d.sites && d.sites.length>0 && d.sites.some(s=>s.name.trim()));
+        if(!anySite){ alert('يجب إضافة موقع واحد على الأقل'); return; }
+        if(goals.length===0){ alert('يجب إضافة هدف واحد على الأقل'); return; }
+
+        const plan = {id: 'plan_'+Date.now(), start, end, duration, type, company, team, days, goals, createdAt: new Date().toISOString(), completed:false, completionPercent:0 };
+        const existing = JSON.parse(localStorage.getItem('routePlans')||'[]');
+        existing.push(plan);
+        localStorage.setItem('routePlans', JSON.stringify(existing));
+        
+        // Reset form
+        document.getElementById('routePlanForm').reset();
+        document.getElementById('planDuration').textContent = '0';
+        document.getElementById('selectedTeamDisplay').textContent = 'لا أحد';
+        daysContainer.innerHTML = '';
+        addDay();
+        goalsEditor.innerText = '1- ';
+        
+        // الانتقال للقائمة
+        alert('تم حفظ خطة المرور بنجاح');
+        showScreen('plansList');
+    }
+
+    // Removed legacy outputs view
+
+    // تصدير PDF من بيانات النموذج مباشرة (تنسيق احترافي شبيه بتقارير التطبيق)
+    window.exportRoutePlanPDFFromForm = function(){
+        const start = document.getElementById('planStart').value || '';
+        const end = document.getElementById('planEnd').value || '';
+        const duration = document.getElementById('planDuration').textContent || '0';
+        const company = document.getElementById('planCompany').value || '';
+        const type = document.getElementById('planType').value || '';
+        const team = Array.from(teamListEl.querySelectorAll('input[type=checkbox]:checked')).map(i=>i.value);
+        const days = Array.from(daysContainer.children).map((d,di)=>{
+            const sites = Array.from(d.querySelectorAll('.site-input')).map((s,si)=>({name:s.value||('موقع '+(si+1))}));
+            return {dayNumber: di+1, sites};
+        });
+        const goalsText = goalsEditor.innerText.trim();
+        const goals = goalsText.split('\n').map(l=>l.replace(/^[0-9]+-\s*/,'').trim()).filter(Boolean);
+
+        const logoHolding = window.LOGO_HOLDING || 'logo-holding.png';
+        const logoSafety = window.LOGO_SAFETY || 'logo-safety.png';
+
+        // بناء HTML منسق
+        const tpl = document.getElementById('pdfTemplate');
+        const titleHtml = `
+            <div class="report-title-card">
+                <div class="report-title-logos">
+                    <img src="${logoHolding}" class="report-title-logo">
+                    <div class="report-title-text"><h2>خطة مرور</h2><div><span dir="ltr">${start} — ${end}</span></div></div>
+                    <img src="${logoSafety}" class="report-title-logo">
+                </div>
+            </div>`;
+
+        let body = `<div style="font-family:'Cairo','IBM Plex Sans Arabic',sans-serif;direction:rtl;text-align:right;padding:20px;background-color:#ffffff;color:#1e293b;line-height:1.7;">`;
+        
+        // بيانات المأمورية
+        body += `<h3 style="color:#1a73e8; border-right:4px solid #1a73e8; padding-right:8px; margin-top:20px; margin-bottom:12px; font-size:16px; font-weight:bold;">📋 بيانات المأمورية</h3>`;
+        body += `<table style="width:100%; border-collapse:collapse; margin-bottom:20px; font-size:14px; background:#ffffff; border:1px solid #e2e8f0; border-radius:8px; overflow:hidden;">
+            <tr style="background-color:#f8fafc; border-bottom:1px solid #e2e8f0;">
+                <td style="padding:10px 12px; font-weight:bold; color:#475569; width:25%; border-left:1px solid #e2e8f0;">الشركة / الجهة</td>
+                <td style="padding:10px 12px; color:#0f172a; width:25%; border-left:1px solid #e2e8f0;">${company||'--'}</td>
+                <td style="padding:10px 12px; font-weight:bold; color:#475569; width:25%; border-left:1px solid #e2e8f0;">النوع</td>
+                <td style="padding:10px 12px; color:#0f172a; width:25%;">${type}</td>
+            </tr>
+            <tr style="border-bottom:1px solid #e2e8f0;">
+                <td style="padding:10px 12px; font-weight:bold; color:#475569; border-left:1px solid #e2e8f0;">الفترة</td>
+                <td style="padding:10px 12px; color:#0f172a; border-left:1px solid #e2e8f0;"><span dir="ltr">${start} — ${end}</span></td>
+                <td style="padding:10px 12px; font-weight:bold; color:#475569; border-left:1px solid #e2e8f0;">المدة</td>
+                <td style="padding:10px 12px; color:#0f172a;">${duration} يوم</td>
+            </tr>
+            <tr>
+                <td style="padding:10px 12px; font-weight:bold; color:#475569; border-left:1px solid #e2e8f0;">فريق العمل</td>
+                <td style="padding:10px 12px; color:#0f172a;" colspan="3">${team.join('، ')}</td>
+            </tr>
+        </table>`;
+
+        // المواقع المستهدفة
+        body += `<h3 style="color:#1a73e8; border-right:4px solid #1a73e8; padding-right:8px; margin-top:25px; margin-bottom:12px; font-size:16px; font-weight:bold;">📍 المواقع المستهدفة</h3>`;
+        days.forEach(d=>{
+            body += `<div style="margin-bottom:15px; background:#f8fafc; padding:14px; border-radius:10px; border:1px solid #e2e8f0;">`;
+            body += `<strong style="color:#0f172a; font-size:15px; display:block; margin-bottom:10px; border-bottom:1px solid #e2e8f0; padding-bottom:6px;">اليوم ${d.dayNumber}</strong>`;
+            d.sites.forEach((s, si)=> {
+                body += `<div style="padding:10px 0; border-bottom:1px solid #f1f5f9; text-align:right; font-size:14px; display:flex;justify-content:space-between;align-items:center;gap:12px;">`;
+                body += `<span style="font-weight:700;color:#475569;">${si+1}.</span>`;
+                body += `<span style="color:#334155;">${s.name || 'موقع '+(si+1)}</span>`;
+                body += `</div>`;
+            });
+            body += `</div>`;
+        });
+
+        // أهداف المأمورية
+        body += `<h3 style="color:#1a73e8; border-right:4px solid #1a73e8; padding-right:8px; margin-top:25px; margin-bottom:12px; font-size:16px; font-weight:bold;">🎯 أهداف المأمورية</h3>`;
+        body += `<div style="background:#ffffff; padding:12px; border-radius:8px; border:1px solid #e2e8f0;">`;
+        goals.forEach((g, gi)=> {
+            body += `<div style="padding:8px 0; border-bottom:1px solid #f1f5f9; text-align:right; font-size:13px;">`;
+            body += `<span style="color:#64748b; font-weight:bold; margin-left:8px;">${gi+1}.</span>`;
+            body += `<span style="color:#334155;">${g}</span>`;
+            body += `</div>`;
+        });
+        body += `</div>`;
+
+        body += `</div>`;
+
+        tpl.innerHTML = titleHtml + body;
+        tpl.style.display = 'block';
+        if (window.fixArabicSpaces) window.fixArabicSpaces(tpl);
+
+        const images = Array.from(tpl.getElementsByTagName('img'));
+        const promises = images.map(img => {
+            return new Promise(resolve => {
+                if (img.complete) resolve();
+                else {
+                    img.onload = resolve;
+                    img.onerror = resolve;
+                    setTimeout(resolve, 3000);
+                }
+            });
+        });
+
+        Promise.all(promises).then(() => {
+            const opt = {
+                margin: 0.6,
+                filename: 'خطة_المرور.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true, allowTaint: false },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(tpl).toPdf().get('pdf').then(pdf => {
+                const pdfBlob = pdf.output('blob');
+                tpl.style.display = 'none';
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(pdfBlob);
+                link.download = 'خطة_المرور.pdf';
+                link.style.display = 'none';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(link.href);
+            }).catch(err => {
+                tpl.style.display = 'none';
+                console.error(err);
+                alert('خطأ أثناء حفظ الـ PDF');
+            });
+        });
+    }
+
+    // حساب نسبة الإنجاز عند الانتهاء
+    window.finalizeProgress = function(){
+        const el = document.getElementById('planDetailContainer');
+        const checks = el.querySelectorAll('input[type=checkbox]');
+        if(!checks.length){ alert('لا توجد مواقع لحساب النسبة'); return; }
+        const total = checks.length;
+        const done = Array.from(checks).filter(c=>c.checked).length;
+        const pct = Math.round((done/total)*100);
+        
+        // We need the plan id
+        const planId = el.getAttribute('data-plan-id');
+        const plans = JSON.parse(localStorage.getItem('routePlans')||'[]');
+        const planIndex = plans.findIndex(p => p.id === planId);
+        
+        if(planIndex === -1) {
+            // fallback to last plan if no id
+            if(!plans.length) return;
+            const plan = plans[plans.length-1];
+            plan.completed = true; plan.completionPercent = pct; plans[plans.length-1]=plan; localStorage.setItem('routePlans', JSON.stringify(plans));
+        } else {
+            // Update specific plan and sites
+            const plan = plans[planIndex];
+            plan.completed = true; plan.completionPercent = pct;
+            
+            // update sites checked status
+            let checkIdx = 0;
+            plan.days.forEach(d => {
+                d.sites.forEach(s => {
+                    if(checks[checkIdx]) {
+                        s.done = checks[checkIdx].checked;
+                    }
+                    checkIdx++;
+                });
+            });
+            plans[planIndex] = plan;
+            localStorage.setItem('routePlans', JSON.stringify(plans));
+        }
+        
+        const completionEl = document.getElementById('routeCompletion');
+        if(completionEl) completionEl.textContent = pct + '%';
+        alert('تم تسجيل نسبة الإنجاز: ' + pct + '%');
+        if(document.getElementById('plansList').classList.contains('active')) {
+             renderPlansList();
+        }
+    }
+
+    // عرض القائمة والفلترة
+    window.renderPlansList = function() {
+        const plans = JSON.parse(localStorage.getItem('routePlans')||'[]');
+        const c = document.getElementById('plansContainer');
+        if (!plans.length) { c.innerHTML = '<div style="text-align:center;padding:60px 20px;color:#64748b;"><i class="fas fa-map" style="font-size:60px;margin-bottom:15px;opacity:0.3;display:block;"></i><p>لا توجد خطط مأموريات بعد</p></div>'; return; }
+        // نعرض الأحدث أولاً
+        c.innerHTML = [...plans].reverse().map(function (p) {
+            const isDone = p.completed && p.completionPercent === 100;
+            const isPartial = p.completed && p.completionPercent > 0 && p.completionPercent < 100;
+            const sc = isDone ? 'status-compliant' : (isPartial ? 'status-follow-up' : 'status-non-compliant');
+            const bc = isDone ? 'badge-compliant' : (isPartial ? 'badge-follow-up' : 'badge-non-compliant');
+            const statusText = p.completed ? (p.completionPercent + '% مكتمل') : 'لم يبدأ';
+            return '<div class="report-card ' + sc + '" onclick="viewPlanDetails(\'' + p.id + '\')"><div class="report-card-icon"><i class="fas fa-map-marked-alt"></i></div><div class="report-card-info"><h4>خطة: ' + p.type + '</h4><p><i class="fas fa-building"></i> ' + (p.company || 'غير محدد') + '</p><p><i class="fas fa-calendar-alt"></i> ' + p.start + ' إلى ' + p.end + ' (' + p.duration + ' أيام)</p><p><i class="fas fa-users"></i> ' + p.team.length + ' أعضاء</p></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;"><span class="report-card-badge ' + bc + '">' + statusText + '</span><button class="btn btn-small btn-danger" style="padding:5px 10px;font-size:11px;" onclick="event.stopPropagation();deletePlan(\'' + p.id + '\')"><i class="fas fa-trash"></i></button></div></div>';
+        }).join('');
+    }
+
+    window.filterPlans = function() {
+        const plans = JSON.parse(localStorage.getItem('routePlans')||'[]');
+        const s = document.getElementById('searchInputPlans').value.toLowerCase();
+        const typeFilter = document.getElementById('filterTypePlans').value;
+        const compFilter = document.getElementById('filterCompletionPlans').value;
+        const companyFilter = document.getElementById('filterCompanyPlans').value;
+        
+        const cards = document.getElementById('plansContainer').querySelectorAll('.report-card');
+        const reversedPlans = [...plans].reverse();
+        
+        reversedPlans.forEach(function (p, i) {
+            const ms = (p.type || '').toLowerCase().includes(s) || (p.company || '').toLowerCase().includes(s) || (p.team.join(' ')).toLowerCase().includes(s);
+            const mt = typeFilter === 'all' || p.type === typeFilter;
+            const mc = companyFilter === 'all' || p.company === companyFilter;
+            
+            let mComp = true;
+            if(compFilter === '100') mComp = p.completionPercent === 100;
+            else if(compFilter === 'partial') mComp = p.completionPercent > 0 && p.completionPercent < 100;
+            else if(compFilter === '0') mComp = !p.completed || p.completionPercent === 0;
+            
+            if (cards[i]) cards[i].style.display = (ms && mt && mc && mComp) ? 'flex' : 'none';
+        });
+    }
+
+    // عرض التفاصيل
+    window.viewPlanDetails = function(id) {
+        const plans = JSON.parse(localStorage.getItem('routePlans')||'[]');
+        const plan = plans.find(p => p.id === id);
+        if(!plan) return;
+        window.currentPlanId = id; // for PDF export
+        
+        const el = document.getElementById('planDetailContainer');
+        el.setAttribute('data-plan-id', id);
+        el.innerHTML = '';
+
+        const headerSection = document.createElement('div');
+        headerSection.className = 'section-card';
+        headerSection.innerHTML = `
+            <h3><i class="fas fa-info-circle"></i> بيانات المأمورية</h3>
+            <div class="detail-row"><span class="detail-label">الشركة / الجهة</span><span class="detail-value">${plan.company||'--'}</span></div>
+            <div class="detail-row"><span class="detail-label">النوع</span><span class="detail-value">${plan.type}</span></div>
+            <div class="detail-row"><span class="detail-label">الفترة</span><span class="detail-value">${plan.start} إلى ${plan.end} (${plan.duration} يوم)</span></div>
+            <div class="detail-row"><span class="detail-label">فريق العمل</span><span class="detail-value">${plan.team.join('، ')}</span></div>
+        `;
+        el.appendChild(headerSection);
+
+        const daysWrap = document.createElement('div');
+        daysWrap.className = 'section-card';
+        daysWrap.innerHTML = `<h3><i class="fas fa-map-marker-alt"></i> المواقع المستهدفة</h3>`;
+        plan.days.forEach(d=>{
+            const dEl = document.createElement('div');
+            dEl.style.marginBottom = '16px';
+            dEl.innerHTML = `<h4>اليوم ${d.dayNumber}</h4>`;
+            const list = document.createElement('div');
+            list.style.display = 'grid';
+            list.style.gap = '10px';
+            d.sites.forEach((s,si)=>{
+                const row = document.createElement('div');
+                row.className = 'site-row';
+                row.innerHTML = `<span><span class="site-number">${si+1}.</span> ${s.name||('موقع '+(si+1))}</span><span class="site-status">${s.done ? '✅ تم المرور' : ''}</span>`;
+                list.appendChild(row);
+            });
+            dEl.appendChild(list);
+            daysWrap.appendChild(dEl);
+        });
+        el.appendChild(daysWrap);
+
+        const goalsEl = document.createElement('div');
+        goalsEl.className = 'section-card';
+        goalsEl.innerHTML = `<h3><i class="fas fa-bullseye"></i> أهداف المأمورية</h3>`;
+        const goalsList = document.createElement('div');
+        goalsList.style.display = 'grid';
+        goalsList.style.gap = '10px';
+        goalsList.style.marginTop = '10px';
+        goalsList.style.padding = '12px';
+        goalsList.style.background = '#ffffff';
+        goalsList.style.borderRadius = '10px';
+        goalsList.style.border = '1px solid #e2e8f0';
+        plan.goals.forEach((g, gi)=>{
+            const item = document.createElement('div');
+            item.className = 'goal-item';
+            item.innerHTML = `<span class="goal-index">${gi+1}.</span><span>${g}</span>`;
+            goalsList.appendChild(item);
+        });
+        goalsEl.appendChild(goalsList);
+        el.appendChild(goalsEl);
+
+        const progressEl = document.createElement('div');
+        progressEl.className = 'progress-box';
+        progressEl.innerHTML = `
+            <div style="font-size:16px;font-weight:700;margin-bottom:12px;">نسبة الإنجاز: <strong id="routeCompletion">${plan.completed ? plan.completionPercent+'%' : '--'}</strong></div>
+            <button type="button" class="btn btn-success" onclick="finalizeProgress()"><i class="fas fa-check-circle"></i> تحديث نسبة الإنجاز وحفظ التغييرات</button>
+        `;
+        el.appendChild(progressEl);
+
+        showScreen('viewPlanScreen');
+    }
+
+    window.exportCurrentPlanPDF = function() {
+        const plans = JSON.parse(localStorage.getItem('routePlans')||'[]');
+        const plan = plans.find(p => p.id === window.currentPlanId);
+        if(!plan) return;
+        
+        const logoHolding = window.LOGO_HOLDING || 'logo-holding.png';
+        const logoSafety = window.LOGO_SAFETY || 'logo-safety.png';
+
+        // build temporary DOM element for PDF
+        const tpl = document.getElementById('pdfTemplate');
+        const titleHtml = `
+            <div class="report-title-card">
+                <div class="report-title-logos">
+                    <img src="${logoHolding}" class="report-title-logo">
+                    <div class="report-title-text"><h2>خطة مرور</h2><div><span dir="ltr">${plan.start} — ${plan.end}</span></div></div>
+                    <img src="${logoSafety}" class="report-title-logo">
+                </div>
+            </div>`;
+
+        let body = `<div style="font-family:'Cairo','IBM Plex Sans Arabic',sans-serif;direction:rtl;text-align:right;padding:20px;background-color:#ffffff;color:#1e293b;line-height:1.7;">`;
+        
+        // بيانات المأمورية
+        body += `<h3 style="color:#1a73e8; border-right:4px solid #1a73e8; padding-right:8px; margin-top:20px; margin-bottom:12px; font-size:16px; font-weight:bold;">📋 بيانات المأمورية</h3>`;
+        body += `<table style="width:100%; border-collapse:collapse; margin-bottom:20px; font-size:14px; background:#ffffff; border:1px solid #e2e8f0; border-radius:8px; overflow:hidden;">
+            <tr style="background-color:#f8fafc; border-bottom:1px solid #e2e8f0;">
+                <td style="padding:10px 12px; font-weight:bold; color:#475569; width:25%; border-left:1px solid #e2e8f0;">الشركة / الجهة</td>
+                <td style="padding:10px 12px; color:#0f172a; width:25%; border-left:1px solid #e2e8f0;">${plan.company||'--'}</td>
+                <td style="padding:10px 12px; font-weight:bold; color:#475569; width:25%; border-left:1px solid #e2e8f0;">النوع</td>
+                <td style="padding:10px 12px; color:#0f172a; width:25%;">${plan.type}</td>
+            </tr>
+            <tr style="border-bottom:1px solid #e2e8f0;">
+                <td style="padding:10px 12px; font-weight:bold; color:#475569; border-left:1px solid #e2e8f0;">الفترة</td>
+                <td style="padding:10px 12px; color:#0f172a; border-left:1px solid #e2e8f0;"><span dir="ltr">${plan.start} — ${plan.end}</span></td>
+                <td style="padding:10px 12px; font-weight:bold; color:#475569; border-left:1px solid #e2e8f0;">المدة</td>
+                <td style="padding:10px 12px; color:#0f172a;">${plan.duration} يوم</td>
+            </tr>
+            <tr style="border-bottom:1px solid #e2e8f0;">
+                <td style="padding:10px 12px; font-weight:bold; color:#475569; border-left:1px solid #e2e8f0;">فريق العمل</td>
+                <td style="padding:10px 12px; color:#0f172a;" colspan="3">${plan.team.join('، ')}</td>
+            </tr>
+            <tr>
+                <td style="padding:10px 12px; font-weight:bold; color:#475569; border-left:1px solid #e2e8f0;">نسبة الإنجاز</td>
+                <td style="padding:10px 12px; color:#0f172a;" colspan="3">
+                    <span style="font-weight:bold; color:#0d9488; font-size:15px;">${plan.completed ? plan.completionPercent+'%' : 'لم يتم التسجيل'}</span>
+                </td>
+            </tr>
+        </table>`;
+
+        // المواقع المستهدفة
+        body += `<h3 style="color:#1a73e8; border-right:4px solid #1a73e8; padding-right:8px; margin-top:25px; margin-bottom:12px; font-size:16px; font-weight:bold;">📍 المواقع المستهدفة</h3>`;
+        plan.days.forEach(d=>{
+            body += `<div style="margin-bottom:15px; background:#f8fafc; padding:12px; border-radius:8px; border:1px solid #e2e8f0;">`;
+            body += `<strong style="color:#0f172a; font-size:14px; display:block; margin-bottom:8px; border-bottom:1px solid #e2e8f0; padding-bottom:4px;">اليوم ${d.dayNumber}</strong>`;
+            d.sites.forEach((s, si)=> {
+                const doneMark = s.done ? ' <span style="color:#0d9488; font-weight:bold; margin-right:8px;">(✅ تم المرور)</span>' : '';
+                body += `<div style="padding:6px 0; border-bottom:1px solid #f1f5f9; text-align:right; font-size:13px;">`;
+                body += `<span style="color:#64748b; font-weight:bold; margin-left:8px;">${si+1}.</span>`;
+                body += `<span style="color:#334155;">${s.name||'موقع'}</span>`;
+                body += `${doneMark}`;
+                body += `</div>`;
+            });
+            body += `</div>`;
+        });
+
+        // أهداف المأمورية
+        body += `<h3 style="color:#1a73e8; border-right:4px solid #1a73e8; padding-right:8px; margin-top:25px; margin-bottom:12px; font-size:16px; font-weight:bold;">🎯 أهداف المأمورية</h3>`;
+        body += `<div style="background:#ffffff; padding:12px; border-radius:8px; border:1px solid #e2e8f0;">`;
+        plan.goals.forEach((g, gi)=> {
+            body += `<div style="padding:8px 0; border-bottom:1px solid #f1f5f9; text-align:right; font-size:13px;">`;
+            body += `<span style="color:#64748b; font-weight:bold; margin-left:8px;">${gi+1}.</span>`;
+            body += `<span style="color:#334155;">${g}</span>`;
+            body += `</div>`;
+        });
+        body += `</div>`;
+
+        body += `</div>`;
+        tpl.innerHTML = titleHtml + body;
+        tpl.style.display = 'block';
+        if (window.fixArabicSpaces) window.fixArabicSpaces(tpl);
+
+        const images = Array.from(tpl.getElementsByTagName('img'));
+        const promises = images.map(img => {
+            return new Promise(resolve => {
+                if (img.complete) resolve();
+                else {
+                    img.onload = resolve;
+                    img.onerror = resolve;
+                    setTimeout(resolve, 3000);
+                }
+            });
+        });
+
+        const pdfName = 'خطة_مأمورية_' + (plan.company || '') + '_' + plan.start + '.pdf';
+        const safePdfName = pdfName.replace(/[\\/:*?"<>|]/g, '_');
+
+        Promise.all(promises).then(() => {
+            const opt = {
+                margin: 0.6,
+                filename: safePdfName,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true, allowTaint: false },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(tpl).toPdf().get('pdf').then(pdf => {
+                const pdfBlob = pdf.output('blob');
+                tpl.style.display = 'none';
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(pdfBlob);
+                link.download = safePdfName;
+                link.style.display = 'none';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(link.href);
+            }).catch(err => {
+                tpl.style.display = 'none';
+                console.error(err);
+                alert('خطأ أثناء حفظ الـ PDF');
+            });
+        });
+    }
+
+    window.deletePlan = function(id) {
+        if(confirm('هل أنت متأكد من حذف هذه الخطة؟')) {
+            let plans = JSON.parse(localStorage.getItem('routePlans')||'[]');
+            plans = plans.filter(p => p.id !== id);
+            localStorage.setItem('routePlans', JSON.stringify(plans));
+            renderPlansList();
+            alert('تم حذف الخطة');
+        }
+    }
+
+    // تهيئة افتراضية
+    renderTeamList();
+    // ابدأ بيوم واحد افتراضي
+    if(!daysContainer.children.length) addDay();
+
+})();
+</script>
 </body>
 </html>

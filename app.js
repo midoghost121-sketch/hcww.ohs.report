@@ -864,15 +864,21 @@ function generatePDF(report) {
         html2pdf().set(options).from(td).toPdf().get('pdf').then(function (pdf) {
             var pdfBlob = pdf.output('blob');
             td.style.display = 'none';
+            // تنزيل الـPDF مباشرة على الجهاز بدون الاعتماد على Nextcloud
+            var pdfUrl = URL.createObjectURL(pdfBlob);
             var link = document.createElement('a');
-            link.href = URL.createObjectURL(pdfBlob);
+            link.href = pdfUrl;
             link.download = safeFileName;
             link.style.display = 'none';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            URL.revokeObjectURL(link.href);
-            uploadPDF(pdfBlob, safeFileName).then(function () { showScreen('mainScreen'); });
+
+            // نترك الرابط متاحًا قليلًا حتى يكتمل بدء التنزيل داخل Android/المتصفح
+            setTimeout(function () { URL.revokeObjectURL(pdfUrl); }, 60000);
+
+            showToast('تم حفظ ملف PDF على الجهاز في مجلد التنزيلات');
+            showScreen('mainScreen');
         })['catch'](function (err) {
             td.style.display = 'none';
             console.error('PDF generation error:', err);

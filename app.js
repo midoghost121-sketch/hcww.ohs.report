@@ -631,53 +631,139 @@ function collectTsmCertificates() {
     return certificates;
 }
 
+function downloadOrShareFile(blob, fileName, mimeType) {
+    mimeType = mimeType || blob.type || 'application/octet-stream';
+    var file = new File([blob], fileName, { type: mimeType });
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        navigator.share({
+            files: [file],
+            title: fileName
+        }).then(function () {
+            showToast('تمت مشاركة/حفظ الملف بنجاح');
+        }).catch(function (err) {
+            if (err && err.name === 'AbortError') return;
+            fallbackFileDownload(blob, fileName, mimeType);
+        });
+        return;
+    }
+    fallbackFileDownload(blob, fileName, mimeType);
+}
+window.downloadOrShareFile = downloadOrShareFile;
+
+function fallbackFileDownload(blob, fileName, mimeType) {
+    try {
+        var blobUrl = URL.createObjectURL(blob);
+        var link = document.createElement('a');
+        link.href = blobUrl;
+        link.download = fileName;
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        link.click();
+        setTimeout(function () {
+            if (link.parentNode) document.body.removeChild(link);
+            URL.revokeObjectURL(blobUrl);
+        }, 60000);
+    } catch (e) {
+        try {
+            var reader = new FileReader();
+            reader.onload = function (evt) {
+                var a = document.createElement('a');
+                a.href = evt.target.result;
+                a.download = fileName;
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(function () { if (a.parentNode) document.body.removeChild(a); }, 1000);
+            };
+            reader.readAsDataURL(blob);
+        } catch (err2) {
+            console.error('Download failed:', err2);
+            showToast('تعذر تنزيل الملف', true);
+        }
+    }
+}
+window.fallbackFileDownload = fallbackFileDownload;
+
+function exportCSVData() {
+    try {
+        var csv = localStorage.getItem('csvReports') || 'التاريخ,الوقت,المفتش,الشركة,نوع المحطة,اسم المحطة,الفرع,الموقع,الحالة,الخطورة,الملاحظات,التوصيات\n';
+        var blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+        downloadOrShareFile(blob, 'reports_' + new Date().toISOString().slice(0, 10) + '.csv', 'text/csv');
+    } catch (e) {
+        console.error('Export CSV error:', e);
+        showToast('تعذر تصدير ملف CSV', true);
+    }
+}
+window.exportCSVData = exportCSVData;
+
 function uploadToNextcloud(path, content, ct) {
-    var url = NC_URL + '/remote.php/dav/files/' + encodeURIComponent(NC_USER) + path;
-    return fetch(url, {
-        method: 'PUT',
-        headers: {
-            'Authorization': 'Basic ' + btoa(NC_USER + ':' + NC_PASS),
-            'Content-Type': ct || 'application/octet-stream'
-        },
-        body: content
-    }).then(function (r) {
-        if (r.ok || r.status === 201 || r.status === 204) return true;
-        throw new Error(r.status);
-    });
+    try {
+        var url = NC_URL + '/remote.php/dav/files/' + encodeURIComponent(NC_USER) + path;
+        return fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Basic ' + btoa(NC_USER + ':' + NC_PASS),
+                'Content-Type': ct || 'application/octet-stream'
+            },
+            body: content
+        }).then(function (r) {
+            if (r.ok || r.status === 201 || r.status === 204) return true;
+            return false;
+        }).catch(function (err) {
+            console.warn('Nextcloud upload error (silenced):', err);
+            return false;
+        });
+    } catch (e) {
+        console.warn('Nextcloud request construction error (silenced):', e);
+        return Promise.resolve(false);
+    }
 }
 
 function createFolder(p) {
-    var url = NC_URL + '/remote.php/dav/files/' + encodeURIComponent(NC_USER) + p;
-    return fetch(url, {
-        method: 'MKCOL',
-        headers: {
-            'Authorization': 'Basic ' + btoa(NC_USER + ':' + NC_PASS)
-        }
-    }).then(function () {
-        return true;
-    })['catch'](function () {
-        return true;
-    });
+    try {
+        var url = NC_URL + '/remote.php/dav/files/' + encodeURIComponent(NC_USER) + p;
+        return fetch(url, {
+            method: 'MKCOL',
+            headers: {
+                'Authorization': 'Basic ' + btoa(NC_USER + ':' + NC_PASS)
+            }
+        }).then(function () {
+            return true;
+        })['catch'](function () {
+            return true;
+        });
+    } catch (e) {
+        return Promise.resolve(true);
+    }
 }
 
 function uploadPDF(blob, name) {
-    var promise = createFolder(NC_REPORTS_FOLDER)
-        .then(function () {
-            return uploadToNextcloud(NC_REPORTS_FOLDER + '/' + name, blob, 'application/pdf');
-        })
-        .then(function () {
-            showToast('تم رفع PDF على Nextcloud');
-        });
-    promise['catch'](function () {
-        showToast('تعذر رفع PDF', true);
-    });
-    return promise;
+    try {
+        return createFolder(NC_REPORTS_FOLDER)
+            .then(function () {
+                return uploadToNextcloud(NC_REPORTS_FOLDER + '/' + name, blob, 'application/pdf');
+            })
+            .then(function (success) {
+                if (success) console.log('PDF uploaded to Nextcloud');
+                return success;
+            })
+            .catch(function () {
+                return false;
+            });
+    } catch (e) {
+        return Promise.resolve(false);
+    }
 }
 
 function uploadCSV() {
-    var csv = localStorage.getItem('csvReports') || '';
-    var blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
-    return uploadToNextcloud(NC_CSV_PATH, blob, 'text/csv')['catch'](function () { });
+    try {
+        var csv = localStorage.getItem('csvReports') || '';
+        var blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+        return uploadToNextcloud(NC_CSV_PATH, blob, 'text/csv').catch(function () { return false; });
+    } catch (e) {
+        return Promise.resolve(false);
+    }
 }
 
 function sendToGoogleSheets(r) {
@@ -700,8 +786,12 @@ function sendToGoogleSheets(r) {
                 companyName: r.companyName,
                 notes: r.notes
             })
+        }).catch(function (e) {
+            console.warn('Google Sheets fetch failed (silenced):', e);
         });
-    } catch (e) { }
+    } catch (e) {
+        console.warn('Google Sheets error (silenced):', e);
+    }
 }
 
 function updateCSVData(r) {
@@ -712,7 +802,7 @@ function updateCSVData(r) {
 
 function saveReport(isDirect) {
     var req = ['inspectorName', 'companyName', 'inspectionDate', 'inspectionTime', 'stationType', 'stationName', 'branch', 'stationLocation', 'safetyOfficer', 'stationManager', 'overallStatus'];
-    for (var i = 0; i < req.length; i++) { var el = document.getElementById(req[i]); if (!el.value.trim()) { el.focus(); el.style.borderColor = '#dc2626'; showToast('يرجى ملء جميع الحقول', true); setTimeout(function () { el.style.borderColor = ''; }, 2000); return null; } }
+    for (var i = 0; i < req.length; i++) { var el = document.getElementById(req[i]); if (!el || !el.value.trim()) { el && el.focus(); if (el) el.style.borderColor = '#dc2626'; showToast('يرجى ملء جميع الحقول', true); setTimeout(function () { if (el) el.style.borderColor = ''; }, 2000); return null; } }
     if (document.getElementById('stationType').value === 'محطة تنقية مياه' || document.getElementById('stationType').value === 'محطة معالجة صرف صحي' || document.getElementById('stationType').value === 'رافع صرف صحي' || document.getElementById('stationType').value === 'رافع مياه شرب') {
         for (var j = 0; j < inspectionItems.length; j++) {
             var itemEl = document.getElementById(inspectionItems[j].id);
@@ -730,7 +820,7 @@ function saveReport(isDirect) {
         date: document.getElementById('inspectionDate').value, time: document.getElementById('inspectionTime').value,
         stationType: document.getElementById('stationType').value, stationName: document.getElementById('stationName').value,
         branch: document.getElementById('branch').value, stationLocation: document.getElementById('stationLocation').value,
-        gps: { lat: cd.dataset.lat || '', lng: cd.dataset.lng || '' },
+        gps: { lat: (cd && cd.dataset) ? cd.dataset.lat || '' : '', lng: (cd && cd.dataset) ? cd.dataset.lng || '' : '' },
         designCapacity: de ? parseFloat(de) : null, actualCapacity: ac ? parseFloat(ac) : null,
         capacityUnit: un, capacityPercentage: (de && ac) ? Math.round((parseFloat(ac) / parseFloat(de)) * 100) : null,
         safetyOfficer: document.getElementById('safetyOfficer').value, stationManager: document.getElementById('stationManager').value,
@@ -742,9 +832,30 @@ function saveReport(isDirect) {
         notes: document.getElementById('notes').value, recommendations: document.getElementById('recommendations').value,
         photos: currentPhotos, createdAt: new Date().toISOString()
     };
-    reports.unshift(report); localStorage.setItem('waterReports', JSON.stringify(reports));
-    updateStats(); buildBranchFilter(); sendToGoogleSheets(report); updateCSVData(report); uploadCSV();
-    if (isDirect) { document.getElementById('saveConfirmModal').style.display = 'flex'; } else { showToast('تم حفظ التقرير ✅'); }
+
+    try {
+        reports.unshift(report);
+        localStorage.setItem('waterReports', JSON.stringify(reports));
+        updateCSVData(report);
+    } catch (e) {
+        console.error('Save report local error:', e);
+        showToast('خطأ في الحفظ المحلي', true);
+        return null;
+    }
+
+    updateStats();
+    buildBranchFilter();
+
+    setTimeout(function () {
+        try { sendToGoogleSheets(report); } catch (e1) { }
+        try { uploadCSV(); } catch (e2) { }
+    }, 10);
+
+    if (isDirect) {
+        document.getElementById('saveConfirmModal').style.display = 'flex';
+    } else {
+        showToast('تم حفظ التقرير ✅');
+    }
     return report;
 }
 
@@ -864,26 +975,13 @@ function generatePDF(report) {
         html2pdf().set(options).from(td).toPdf().get('pdf').then(function (pdf) {
             var pdfBlob = pdf.output('blob');
             td.style.display = 'none';
-            // تنزيل الـPDF مباشرة على الجهاز بدون الاعتماد على Nextcloud
-            var pdfUrl = URL.createObjectURL(pdfBlob);
-            var link = document.createElement('a');
-            link.href = pdfUrl;
-            link.download = safeFileName;
-            link.style.display = 'none';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-
-            // نترك الرابط متاحًا قليلًا حتى يكتمل بدء التنزيل داخل Android/المتصفح
-            setTimeout(function () { URL.revokeObjectURL(pdfUrl); }, 60000);
-
-            showToast('تم حفظ ملف PDF على الجهاز في مجلد التنزيلات');
+            downloadOrShareFile(pdfBlob, safeFileName, 'application/pdf');
+            showToast('تم تجهيز ملف PDF وتنزيله/مشاركته');
             showScreen('mainScreen');
         })['catch'](function (err) {
             td.style.display = 'none';
             console.error('PDF generation error:', err);
-            alert('تفاصيل خطأ PDF: ' + (err.message || err));
-            showToast('خطأ PDF، تحقق من الصور أو اتصال المتصفح', true);
+            showToast('خطأ أثناء إنشاء ملف PDF', true);
         });
     });
 }
@@ -965,14 +1063,9 @@ function exportFilteredReportsPDF() {
     html2pdf().set(options).from(td).toPdf().get('pdf').then(function (pdf) {
         var pdfBlob = pdf.output('blob');
         td.style.display = 'none';
-        var link = document.createElement('a');
-        link.href = URL.createObjectURL(pdfBlob);
-        link.download = 'search_results_' + new Date().toISOString().slice(0, 10) + '.pdf';
-        link.style.display = 'none';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(link.href);
+        var exportName = 'search_results_' + new Date().toISOString().slice(0, 10) + '.pdf';
+        downloadOrShareFile(pdfBlob, exportName, 'application/pdf');
+        showToast('تم تصدير نتائج البحث إلى PDF');
     })['catch'](function (err) {
         td.style.display = 'none';
         console.error('Search results PDF error:', err);

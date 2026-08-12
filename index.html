@@ -356,6 +356,7 @@
         <div class="search-box"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="بحث..." oninput="filterReports()"></div>
         <button type="button" id="advancedSearchToggle" class="btn btn-secondary btn-small" onclick="toggleAdvancedSearch()">بحث متقدم</button>
         <button type="button" class="btn btn-primary btn-small" onclick="exportFilteredReportsPDF()"><i class="fas fa-file-pdf"></i> تصدير PDF</button>
+        <button type="button" class="btn btn-secondary btn-small" onclick="exportCSVData()"><i class="fas fa-file-csv"></i> تصدير CSV</button>
     </div>
     <div id="advancedSearchPanel" class="advanced-search-panel" style="display:none;">
         <select id="filterStatus" onchange="filterReports()"><option value="all">كل الحالات</option><option value="مطابق">مطابق</option><option value="غير مطابق">غير مطابق</option><option value="يحتاج متابعة">يحتاج متابعة</option></select>
@@ -708,14 +709,17 @@
             html2pdf().set(opt).from(tpl).toPdf().get('pdf').then(pdf => {
                 const pdfBlob = pdf.output('blob');
                 tpl.style.display = 'none';
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(pdfBlob);
-                link.download = 'خطة_المرور.pdf';
-                link.style.display = 'none';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                URL.revokeObjectURL(link.href);
+                if (typeof window.downloadOrShareFile === 'function') {
+                    window.downloadOrShareFile(pdfBlob, 'خطة_المرور.pdf', 'application/pdf');
+                } else {
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(pdfBlob);
+                    link.download = 'خطة_المرور.pdf';
+                    link.style.display = 'none';
+                    document.body.appendChild(link);
+                    link.click();
+                    setTimeout(() => { if (link.parentNode) document.body.removeChild(link); }, 1000);
+                }
             }).catch(err => {
                 tpl.style.display = 'none';
                 console.error(err);
@@ -990,14 +994,17 @@
             html2pdf().set(opt).from(tpl).toPdf().get('pdf').then(pdf => {
                 const pdfBlob = pdf.output('blob');
                 tpl.style.display = 'none';
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(pdfBlob);
-                link.download = safePdfName;
-                link.style.display = 'none';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                URL.revokeObjectURL(link.href);
+                if (typeof window.downloadOrShareFile === 'function') {
+                    window.downloadOrShareFile(pdfBlob, safePdfName, 'application/pdf');
+                } else {
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(pdfBlob);
+                    link.download = safePdfName;
+                    link.style.display = 'none';
+                    document.body.appendChild(link);
+                    link.click();
+                    setTimeout(() => { if (link.parentNode) document.body.removeChild(link); }, 1000);
+                }
             }).catch(err => {
                 tpl.style.display = 'none';
                 console.error(err);
